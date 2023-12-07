@@ -53,7 +53,7 @@ const Options = () => {
       headerName: 'Active',
       width: 130,
       renderCell: (params) => {
-        return <>{params.row.active ? 'En cours' : 'En attente'}</>;
+        return <>{params.row.active ? 'En cours' : <span style={{ color: 'red' }}>En attente</span>}</>;
       }
     },
     {

@@ -8,6 +8,7 @@ const { login } = require('../Controllers/auth')
 const multer = require('multer')
 const { Add_Annee } = require('../Controllers/Setting_Annee')
 const { addOption } = require('../Controllers/Option')
+const { AddClasse } = require('../Controllers/Classe')
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -32,6 +33,7 @@ var upload = multer({ storage: storage })
 //PARAMETRES
 router.post("/annee", protect, Add_Annee)
 router.post('/option', protect, addOption)
+router.post('/classe', AddClasse)
 
 
 

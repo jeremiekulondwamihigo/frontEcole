@@ -12,9 +12,9 @@ const initialState = {
   desactiver: '',
   desactiverError: ''
 };
-export const readAllYear = createAsyncThunk('annee/readAllYear', async (id, { rejectWithValue }) => {
+export const readAllYear = createAsyncThunk('annee/readAllYear', async (codeEtablissement, { rejectWithValue }) => {
   try {
-    const response = await get('annee');
+    const response = await get(`annee/${codeEtablissement}`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -22,17 +22,16 @@ export const readAllYear = createAsyncThunk('annee/readAllYear', async (id, { re
 });
 export const AjouterAnnee = createAsyncThunk('annee/AjouterAnnee', async (data, { rejectWithValue }) => {
   try {
-    const response = await post('annee', { annee: data });
+    const response = await post('annee', data);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
 export const DesactiverAnnee = createAsyncThunk('annee/DesactiverAnnee', async (data, { rejectWithValue }) => {
-  const { valeur, id } = data;
+  const { valeur, id, codeEtablissement } = data;
   try {
-    const response = await put('annee/' + id, { valeur: valeur });
-    console.log(response.data);
+    const response = await put('annee/' + id, { valeur: valeur, codeEtablissement });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

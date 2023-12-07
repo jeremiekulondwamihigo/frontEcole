@@ -26,6 +26,7 @@ import ReportAreaChart from './ReportAreaChart';
 import SalesColumnChart from './SalesColumnChart';
 import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
+import { Link } from 'react-router-dom';
 
 // assets
 import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
@@ -33,6 +34,7 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+import { useSelector } from 'react-redux';
 
 // avatar style
 const avatarSX = {
@@ -72,6 +74,7 @@ const status = [
 const DashboardDefault = () => {
   const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');
+  const option = useSelector((state) => state.option);
 
   return (
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
@@ -80,7 +83,14 @@ const DashboardDefault = () => {
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
+        <Link to="/option" style={{ textDecoration: 'none' }}>
+          <AnalyticEcommerce
+            title="Total options organisées"
+            count={`00${option?.option.length}`}
+            percentage={59.3}
+            extra="A ajouté selon les besoins"
+          />
+        </Link>
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="Total Users" count="78,250" percentage={70.5} extra="8,900" />

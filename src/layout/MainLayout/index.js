@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
@@ -11,13 +11,20 @@ import Drawer from './Drawer';
 import Header from './Header';
 import navigation from 'menu-items';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
-
 // types
 import { openDrawer } from 'store/reducers/menu';
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
 const MainLayout = () => {
+  const navigations = useNavigate();
+  const user = useSelector((state) => state.user);
+  useEffect(() => {
+    if (user.getUserError === 'jwt expired' || user.getUser === 'rejected') {
+      navigations('/login', { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
   const theme = useTheme();
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();

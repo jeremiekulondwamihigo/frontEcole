@@ -4,13 +4,16 @@ import TextField from '@mui/material/TextField';
 import ButtonLoading from 'Control/Button';
 import { useDispatch } from 'react-redux';
 import { postOption } from 'Redux/Option';
+import { CreateContexte } from 'Context';
 
 // eslint-disable-next-line react/prop-types
 function FormOption({ data, id }) {
   const [option, setValeur] = React.useState('');
   const dispactch = useDispatch();
+  const { user } = React.useContext(CreateContexte);
   const sendData = async () => {
-    dispactch(postOption(option));
+    let data = { option, codeEtablissement: user?.codeEtablissement };
+    dispactch(postOption(data));
   };
   React.useEffect(() => {
     if (data && id) {

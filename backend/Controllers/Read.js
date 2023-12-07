@@ -12,9 +12,8 @@ module.exports = {
       token = req.headers.authorization.split(' ')[1]
     }
     if (!token) {
-      return res.status(200).json(false)
+      return res.status(400).json('jwt expired')
     }
-
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
@@ -53,8 +52,7 @@ module.exports = {
         )
       }
     } catch (error) {
-      console.log(error)
-      return res.status(200).json(false)
+      return res.status(400).json(error.message)
     }
   },
 }

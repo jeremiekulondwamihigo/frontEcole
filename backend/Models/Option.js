@@ -5,7 +5,8 @@ const schema = new mongoose.Schema(
     option: { type: String, required: [true, 'Ce champs est obligatoire'] },
     codeOption: { type: String, required: true },
     active: { type: Boolean, required: true, default: true },
-    id : {type:String, required : true}
+    id : {type:String, required : true},
+    codeEtablissement : {type:String, required:true}
   },
   { timestamps: true },
 )

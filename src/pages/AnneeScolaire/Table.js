@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deletes } from 'utils/Liens';
 import { DataGrid } from '@mui/x-data-grid';
@@ -7,6 +7,7 @@ import { Fab } from '@mui/material';
 import { EditOutlined, DownSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DesactiverAnnee } from 'Redux/Annee';
 import { messages } from 'Control/Message';
+import { CreateContexte } from 'Context';
 
 const Annee = () => {
   const annes = useSelector((state) => state.annee);
@@ -15,8 +16,10 @@ const Annee = () => {
     const response = await deletes(`annee/${id}`);
     console.log(response);
   };
+  const { user } = useContext(CreateContexte);
   const desactiverYear = async (id, valeur) => {
-    const data = { id, valeur };
+    const data = { id, valeur, codeEtablissement: user?.codeEtablissement };
+    console.log(data);
     dispatch(DesactiverAnnee(data));
   };
 

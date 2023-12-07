@@ -9,8 +9,8 @@ const { readOption } = require('../Controllers/Option')
 
 
 router.get('/user', readUser)
-router.get('/annee', protect, Read_Year)
-router.get('/option', protect, readOption)
+router.get('/annee/:codeEtablissement', protect, Read_Year)
+router.get('/option/:codeEtablissement', protect, readOption)
 
 
 //FIN ETABLISSEMENT

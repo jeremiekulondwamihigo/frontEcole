@@ -11,9 +11,8 @@ module.exports = {
     ) {
       token = req.headers.authorization.split(" ")[1];
     }
-console.log(token)
     if (!token) {
-      return res.status(404).json(false);
+      return res.status(400).json('token expired');
     }
 
     try {
@@ -22,13 +21,13 @@ console.log(token)
       const etablissement = await Model_Etablissement.findById(decoded.id);
 
       if (!etablissement) {
-        return res.status(404).json(false);
+        return res.status(400).json('token expired');
       }
 
       req.user =  etablissement;
       next();
     } catch (error) {
-      return res.status(404).json(false);
+      return res.status(400).json('token expired');
     }
   },
 };

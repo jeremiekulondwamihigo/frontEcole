@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -7,11 +7,13 @@ import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 
 // assets
 import { MessageOutlined, TeamOutlined, LogoutOutlined, UserOutlined, IdcardOutlined } from '@ant-design/icons';
+import { CreateContexte } from 'Context';
 
 // ==============================|| HEADER PROFILE - PROFILE TAB ||============================== //
 
-const ProfileTab = ({ handleLogout }) => {
+const ProfileTab = () => {
   const theme = useTheme();
+  const { LogOut } = useContext(CreateContexte);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const handleListItemClick = (event, index) => {
@@ -45,7 +47,7 @@ const ProfileTab = ({ handleLogout }) => {
         </ListItemIcon>
         <ListItemText primary="Carte de l'élève" />
       </ListItemButton>
-      <ListItemButton selected={selectedIndex === 2} onClick={handleLogout}>
+      <ListItemButton selected={selectedIndex === 2} onClick={() => LogOut()}>
         <ListItemIcon>
           <LogoutOutlined />
         </ListItemIcon>

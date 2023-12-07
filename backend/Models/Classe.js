@@ -7,10 +7,11 @@ const schema = new mongoose.Schema({
     max: 8,
     required: true,
   },
-  code_Option: { type: String, required: true,  trim: true, ref:"options" },
-  resultat: { type: Number, required: true, default: 0 },
-  effectif: { type: Number, required: true },
-  codeClasse: { type: String, required: true, unique: true, },
+  codeOption: { type: String, required: true, trim: true, ref: 'options' },
+  active: { type: Boolean, required: true, default: true },
+  codeClasse: { type: String, required: true, unique: true },
+  indexe : {  type: String, required:true, default :'A'},
+  titulaire : { type:String, required:false}
 })
 const model = mongoose.model('Classe', schema)
 module.exports = model

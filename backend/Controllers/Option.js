@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb')
 const { generateString } = require('../Fonctions/Static_Function')
 const modelOption = require('../Models/Option')
 const asyncLab = require('async')
@@ -5,8 +6,8 @@ const asyncLab = require('async')
 module.exports = {
   addOption: (req, res) => {
     try {
-      const { option } = req.body
-      if (!option) {
+      const { option, codeEtablissement } = req.body
+      if (!option || !codeEtablissement) {
         return res.status(404).json("Veuillez entrer l'option")
       }
 
@@ -14,7 +15,7 @@ module.exports = {
         [
           function (done) {
             modelOption
-              .findOne({ option })
+              .findOne({ option, codeEtablissement })
               .then((response) => {
                 if (response) {
                   return res.status(404).json('Cette option existe deja')
@@ -28,7 +29,12 @@ module.exports = {
           },
           function (response, done) {
             modelOption
-              .create({ option, codeOption: generateString(8), id : new Date() })
+              .create({
+                option,
+                codeOption: generateString(8),
+                id: new Date(),
+                codeEtablissement,
+              })
               .then((options) => {
                 done(options)
               })
@@ -50,9 +56,10 @@ module.exports = {
     }
   },
   readOption: (req, res) => {
+    const { codeEtablissement } = req.params
     try {
       modelOption
-        .find({})
+        .find({ codeEtablissement })
         .then((options) => {
           return res.status(200).json(options.reverse())
         })
@@ -65,10 +72,12 @@ module.exports = {
   },
   updateOption: (req, res) => {
     try {
-      const { id, data } = req.body
-      console.log(req.body)
+      const { id, data, codeEtablissement } = req.body
+
       modelOption
-        .findByIdAndUpdate(id, data , { new: true })
+        .findOneAndUpdate({ _id: new ObjectId(id), codeEtablissement }, data, {
+          new: true,
+        })
         .then((options) => {
           return res.status(200).json(options)
         })

@@ -11,25 +11,26 @@ const initialState = {
   updateOptionError: ''
 };
 
-export const postOption = createAsyncThunk('option/postOption', async (option, { rejectWithValue }) => {
+export const postOption = createAsyncThunk('option/postOption', async (data, { rejectWithValue }) => {
+  const { option, codeEtablissement } = data;
   try {
-    const resposne = await post('option', { option: option });
+    const resposne = await post('option', { option: option, codeEtablissement });
     return resposne.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);
   }
 });
-export const getOption = createAsyncThunk('option/getOption', async (option, { rejectWithValue }) => {
+export const getOption = createAsyncThunk('option/getOption', async (codeEtablissement, { rejectWithValue }) => {
   try {
-    const resposne = await get('option');
+    const resposne = await get(`option/${codeEtablissement}`);
     return resposne.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);
   }
 });
 export const putOption = createAsyncThunk('option/putOption', async (datas, { rejectWithValue }) => {
-  let { id, data } = datas;
-  let donner = { id, data };
+  let { id, data, codeEtablissement } = datas;
+  let donner = { id, data, codeEtablissement };
   try {
     const resposne = await put('option', donner);
     return resposne.data;

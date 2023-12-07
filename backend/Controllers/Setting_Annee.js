@@ -2,20 +2,21 @@ const Model_Year = require("../Models/Model_Annee");
 const { isEmpty, generateString } = require("../Fonctions/Static_Function");
 const AsyncLib = require("async");
 const Model_Eleve = require("../Models/EleveInscrit");
+const { ObjectId } = require("mongodb");
 
 module.exports = {
   Add_Annee: (req, res) => {
-    const { annee } = req.body;
+    const { annee, codeEtablissement } = req.body;
 
     try {
-      if (isEmpty(annee)) {
+      if (!annee || !codeEtablissement) {
         return res.status(404).json("Veuillez remplir le champs");
       }
       let year = annee.trim();
       AsyncLib.waterfall(
         [
           function (done) {
-            Model_Year.findOne({ annee: year })
+            Model_Year.findOne({ annee: year, codeEtablissement })
               .then((response) => {
                 if (response) {
                   return res
@@ -32,6 +33,7 @@ module.exports = {
           function (response, done) {
             Model_Year.create({
               annee,
+              codeEtablissement,
               code_Annee: generateString(5),
               id : new Date(),
             })
@@ -57,14 +59,15 @@ module.exports = {
   },
   Modificate_Year: (req, res) => {
 
-    const { valeur } = req.body;
+    const { valeur, codeEtablissement } = req.body;
+    console.log(req.body)
 
     try {
       AsyncLib.waterfall(
         [
           function (done) {
             if (valeur === true) {
-              Model_Year.findOne({ active: true }).then((anneActifFound) => {
+              Model_Year.findOne({ active: true, codeEtablissement }).then((anneActifFound) => {
                 if (anneActifFound) {
                   return res
                     .status(404)
@@ -78,8 +81,8 @@ module.exports = {
             }
           },
           function (anneeCreate, done) {
-            Model_Year.findByIdAndUpdate(
-              req.params.id,
+            Model_Year.findOneAndUpdate({codeEtablissement, _id : new ObjectId(req.params.id)}
+             ,
               { active: valeur },
               {
                 new: true,
@@ -88,7 +91,6 @@ module.exports = {
           },
         ],
         function (result) {
-          console.log(result)
           if (result) {
             return res.status(200).json(result);
           } else {
@@ -101,7 +103,8 @@ module.exports = {
     }
   },
   Read_Year: (req, res) => {
-    Model_Year.find({}).then((anneeFound) => {
+    const {codeEtablissement} = req.params
+    Model_Year.find({codeEtablissement}).then((anneeFound) => {
       res.send(anneeFound.reverse());
     });
   },
@@ -112,7 +115,6 @@ module.exports = {
       [
         function (done) {
           Model_Eleve.find({ code_Annee: id }).then(function (eleve) {
-            console.log(eleve.length > 0)
             if (eleve.length > 0) {
               return res
                 .status(201)
