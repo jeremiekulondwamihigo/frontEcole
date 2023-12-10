@@ -9,7 +9,7 @@ const { Add_Annee } = require('../Controllers/Setting_Annee')
 const { addOption } = require('../Controllers/Option')
 const { AddClasse } = require('../Controllers/Classe')
 const { Cours } = require('../Controllers/Cours')
-const { PremEnregistrement } = require('../Controllers/Eleve')
+const { PremEnregistrement, Inscription } = require('../Controllers/Eleve')
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -37,6 +37,7 @@ router.post('/option', protect, addOption)
 router.post('/classe', protect, AddClasse)
 router.post('/cours', protect, Cours)
 router.post('/infoEleve', PremEnregistrement)
+router.post("/inscription", Inscription)
 
 //FIN TUTEUR
 router.post('/login', login)

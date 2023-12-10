@@ -33,7 +33,7 @@ module.exports = {
           function (response, done) {
             Model_Year.create({
               annee,
-              code_Annee: generateString(5),
+              codeAnnee: generateString(5),
               id: new Date(),
             })
               .then((anneeCreate) => {
@@ -110,7 +110,7 @@ module.exports = {
     AsyncLib.waterfall(
       [
         function (done) {
-          Model_Eleve.find({ code_Annee: id }).then(function (eleve) {
+          Model_Eleve.find({ codeAnnee: id }).then(function (eleve) {
             if (eleve.length > 0) {
               return res.status(201).json('Impossible de supprimer cette année')
             } else {
@@ -120,7 +120,7 @@ module.exports = {
         },
         function (eleve, done) {
           Model_Year.findOne({
-            code_Annee: id,
+            codeAnnee: id,
           }).then((AnneeFound) => {
             if (!AnneeFound) {
               return res.status(201).send('Year not found...')

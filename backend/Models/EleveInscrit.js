@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const ModelInfo = require("./Eleves");
 
 const schema = new mongoose.Schema({
   id: {
@@ -7,17 +6,12 @@ const schema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  code_eleve: {
+  codeEleve: {
     type: String,
     required: true,
     ref: "eleves",
   },
-  codeEtablissement: {
-    type: String,
-    required: true,
-    ref: "etablissements",
-  },
-  code_Annee: {
+  codeAnnee: {
     type: String,
     required: true,
   },
@@ -32,14 +26,6 @@ const schema = new mongoose.Schema({
     required: true,
     default: 0,
   },
-  codeInscription: {
-    type: String,
-    required: true,
-  },
-  cotation: {
-    type: mongoose.Types.ObjectId,
-    ref: "Cotation",
-  },
   ref: {
     type: String,
     required: true,
@@ -47,19 +33,7 @@ const schema = new mongoose.Schema({
   },
 });
 
-schema.post("save", function (docs, next) {
-  next();
-  ModelInfo.findByIdAndUpdate(
-    {
-      code_eleve: docs.code_eleve,
-    },
-    {
-      $set: {
-        libre: false,
-      },
-    }
-  );
-});
+
 
 const model = mongoose.model("EleveInscrit", schema);
 module.exports = model;
