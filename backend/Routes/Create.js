@@ -4,11 +4,12 @@ const { protect } = require('../middleware/auth')
 
 const { login } = require('../Controllers/auth')
 
-
 const multer = require('multer')
 const { Add_Annee } = require('../Controllers/Setting_Annee')
 const { addOption } = require('../Controllers/Option')
 const { AddClasse } = require('../Controllers/Classe')
+const { Cours } = require('../Controllers/Cours')
+const { PremEnregistrement } = require('../Controllers/Eleve')
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -31,11 +32,11 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 //PARAMETRES
-router.post("/annee", protect, Add_Annee)
+router.post('/annee', protect, Add_Annee)
 router.post('/option', protect, addOption)
-router.post('/classe', AddClasse)
-
-
+router.post('/classe', protect, AddClasse)
+router.post('/cours', protect, Cours)
+router.post('/infoEleve', PremEnregistrement)
 
 //FIN TUTEUR
 router.post('/login', login)

@@ -9,9 +9,11 @@ import { Fab } from '@mui/material';
 import { FolderAddOutlined } from '@ant-design/icons';
 import Formulaire from './Formulaire';
 import Popup from 'Control/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const Options = () => {
   const option = useSelector((state) => state.option);
+  const navigation = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -22,12 +24,24 @@ const Options = () => {
     setUpdated({ id, data });
     setOpenUpdate(true);
   };
-  console.log(data, id);
 
   const RenameDebloquer = (id, data) => {
     let donner = { id, data };
     dispatch(putOption(donner));
   };
+
+  const clockOption = (key, donner) => {
+    if (key === 'Bloquer') {
+      RenameDebloquer(donner._id, { active: !donner.active });
+    }
+    if (key === 'Renommer') {
+      fonction(donner._id, donner.option);
+    }
+    if (key === 'Classe') {
+      navigation(`/classe/${donner.codeOption}`, { replace: true });
+    }
+  };
+
   const columns = [
     {
       field: 'id',
@@ -65,16 +79,17 @@ const Options = () => {
           <Dropdown
             overlay={
               <Menu
+                onClick={(e) => clockOption(e.key, params.row)}
                 items={[
                   {
                     label: 'Renommer',
-                    key: 'Copy',
-                    icon: <MessageOutlined onClick={() => fonction(params.row._id, params.row.option)} />
+                    key: 'Renommer',
+                    icon: <MessageOutlined />
                   },
                   {
                     label: params.row.active ? 'Bloquer' : 'Débloquer',
                     key: 'Bloquer',
-                    icon: <MessageOutlined onClick={() => RenameDebloquer(params.row._id, { active: !params.row.active })} />
+                    icon: <MessageOutlined />
                   },
                   {
                     label: 'Supprimez',
@@ -82,8 +97,8 @@ const Options = () => {
                     icon: <MessageOutlined />
                   },
                   {
-                    label: 'Ajoutez une classe',
-                    key: 'add',
+                    label: 'Classe',
+                    key: 'Classe',
                     icon: <MessageOutlined />
                   },
                   {

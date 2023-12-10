@@ -1,0 +1,17 @@
+.greenBackground{
+    background-color: rgb(4, 4, 20);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    font-weight: bolder;
+    text-align: center;
+    width: 99%;
+}
+.redBackground{
+    background-color: rgb(204, 88, 88);
+    color: white;
+    padding: 5px;
+    border-radius: 3px;
+    font-weight: bolder;
+    text-align: center;
+}

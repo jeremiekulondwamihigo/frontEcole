@@ -12,28 +12,36 @@ const initialState = {
 };
 
 export const postOption = createAsyncThunk('option/postOption', async (data, { rejectWithValue }) => {
-  const { option, codeEtablissement } = data;
+  const { option } = data;
   try {
-    const resposne = await post('option', { option: option, codeEtablissement });
-    return resposne.data;
+    const response = await post('option', { option: option });
+    return response.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);
   }
 });
 export const getOption = createAsyncThunk('option/getOption', async (codeEtablissement, { rejectWithValue }) => {
   try {
-    const resposne = await get(`option/${codeEtablissement}`);
+    const resposne = await get(`option`);
     return resposne.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);
   }
 });
 export const putOption = createAsyncThunk('option/putOption', async (datas, { rejectWithValue }) => {
-  let { id, data, codeEtablissement } = datas;
-  let donner = { id, data, codeEtablissement };
+  let { id, data } = datas;
+  let donner = { id, data };
   try {
     const resposne = await put('option', donner);
     return resposne.data;
+  } catch (error) {
+    return rejectWithValue(error.reponse.data);
+  }
+});
+export const postClasse = createAsyncThunk('classe/postClasse', async (datas, { rejectWithValue }) => {
+  try {
+    const response = await post('classe', datas);
+    return response.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);
   }
@@ -140,6 +148,42 @@ const option = createSlice({
       };
     },
     [putOption.rejected]: (state, action) => {
+      return {
+        ...state,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'rejected',
+        updateOptionError: action.payload
+      };
+    },
+    // eslint-disable-next-line no-unused-vars
+    [postClasse.pending]: (state, action) => {
+      return {
+        ...state,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'pending',
+        updateOptionError: ''
+      };
+    },
+    [postClasse.fulfilled]: (state, action) => {
+      let opt = state.option.map((x) => (x._id === action.payload._id ? action.payload : x));
+      return {
+        ...state,
+        option: opt,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'success',
+        updateOptionError: ''
+      };
+    },
+    [postClasse.rejected]: (state, action) => {
       return {
         ...state,
         addOption: '',

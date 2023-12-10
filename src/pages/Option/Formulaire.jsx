@@ -17,10 +17,7 @@ function FormOption({ data, id }) {
   };
   React.useEffect(() => {
     if (data && id) {
-      setValeur({
-        ...option,
-        ...data
-      });
+      console.log(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, id]);

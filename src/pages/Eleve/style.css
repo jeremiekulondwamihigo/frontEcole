@@ -1,0 +1,7 @@
+.buttonAbsolute{
+    z-index: 999;
+    position: absolute;
+  }
+  #chartStatEleve{
+    margin-top: -40px;
+  }

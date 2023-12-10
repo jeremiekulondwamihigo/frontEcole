@@ -6,8 +6,8 @@ const asyncLab = require('async')
 module.exports = {
   addOption: (req, res) => {
     try {
-      const { option, codeEtablissement } = req.body
-      if (!option || !codeEtablissement) {
+      const { option } = req.body
+      if (!option) {
         return res.status(404).json("Veuillez entrer l'option")
       }
 
@@ -15,7 +15,7 @@ module.exports = {
         [
           function (done) {
             modelOption
-              .findOne({ option, codeEtablissement })
+              .findOne({ option })
               .then((response) => {
                 if (response) {
                   return res.status(404).json('Cette option existe deja')
@@ -33,15 +33,42 @@ module.exports = {
                 option,
                 codeOption: generateString(8),
                 id: new Date(),
-                codeEtablissement,
               })
               .then((options) => {
-                done(options)
+                if(options){
+                  done(null, options)
+                }else{
+                  return res.status(404).json("Erreur d'enregistrement")
+                }
               })
               .catch(function (err) {
                 console.log(err)
               })
           },
+          function(option, done){
+            modelOption
+            .aggregate([
+              {
+                $match : { _id : new ObjectId(option._id)},
+              },
+              {
+                $lookup: {
+                  from: 'classes',
+                  localField: 'codeOption',
+                  foreignField: 'codeOption',
+                  as: 'classe',
+                },
+              },
+            ])
+            .then((options) => {
+              if(options){
+                done(options)
+              }
+            })
+            .catch(function (err) {
+              console.log(err)
+            })
+          }
         ],
         function (result) {
           if (result) {
@@ -56,10 +83,18 @@ module.exports = {
     }
   },
   readOption: (req, res) => {
-    const { codeEtablissement } = req.params
     try {
       modelOption
-        .find({ codeEtablissement })
+        .aggregate([
+          {
+            $lookup: {
+              from: 'classes',
+              localField: 'codeOption',
+              foreignField: 'codeOption',
+              as: 'classe',
+            },
+          },
+        ])
         .then((options) => {
           return res.status(200).json(options.reverse())
         })
@@ -72,10 +107,10 @@ module.exports = {
   },
   updateOption: (req, res) => {
     try {
-      const { id, data, codeEtablissement } = req.body
+      const { id, data } = req.body
 
       modelOption
-        .findOneAndUpdate({ _id: new ObjectId(id), codeEtablissement }, data, {
+        .findByIdAndUpdate(id, data, {
           new: true,
         })
         .then((options) => {

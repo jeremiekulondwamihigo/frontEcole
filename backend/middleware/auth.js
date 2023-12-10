@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const Model_Agent = require("../Models/Model_Agent");
 const Model_Etablissement = require("../Models/Model_Etablissement");
 
 module.exports = {

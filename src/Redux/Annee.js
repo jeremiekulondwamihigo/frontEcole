@@ -14,7 +14,7 @@ const initialState = {
 };
 export const readAllYear = createAsyncThunk('annee/readAllYear', async (codeEtablissement, { rejectWithValue }) => {
   try {
-    const response = await get(`annee/${codeEtablissement}`);
+    const response = await get(`annee`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
@@ -29,9 +29,9 @@ export const AjouterAnnee = createAsyncThunk('annee/AjouterAnnee', async (data, 
   }
 });
 export const DesactiverAnnee = createAsyncThunk('annee/DesactiverAnnee', async (data, { rejectWithValue }) => {
-  const { valeur, id, codeEtablissement } = data;
+  const { valeur, id } = data;
   try {
-    const response = await put('annee/' + id, { valeur: valeur, codeEtablissement });
+    const response = await put('annee/' + id, { valeur: valeur });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);

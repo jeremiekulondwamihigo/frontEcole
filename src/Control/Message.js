@@ -1,5 +1,24 @@
 /* eslint-disable react/prop-types */
-import { message } from 'antd';
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
 
-// eslint-disable-next-line prettier/prettier
-export const messages = (text) => {message.info(text);};
+function DirectionSnackbar(props) {
+  const { message, open, setOpen } = props;
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={open}
+        onClose={handleClose}
+        message={message}
+        key="bottom center"
+      />
+    </div>
+  );
+}
+export default DirectionSnackbar;

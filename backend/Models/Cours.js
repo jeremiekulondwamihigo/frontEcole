@@ -11,20 +11,17 @@ const schemaCours = new mongoose.Schema({
   maxima: {
     type: Number,
     required: true,
-    min: 10,
     trim: true,
   },
-  classe: {
-    type: Number,
+  codeClasse: {
+    type: String,
     required: true,
   },
-  code_Option: { type: String, required: true }, //Option ou title = Education de base
   idCours: { type: String, required: true, unique: true },
   validExamen: {
     type: Boolean,
     required: true,
     default: true,
-    enum: [true, false],
   },
   identifiant: { type: String, required: false, default: undefined }, //code domaine ou sous-domaine si option = education de base
 })

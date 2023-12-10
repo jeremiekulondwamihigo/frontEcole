@@ -10,15 +10,17 @@ function index() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [open, setOpen] = React.useState(false);
   return (
-    <MainCard>
-      <Button type="primary" icon={<FolderAddOutlined />} size="large" onClick={() => setOpen(true)}>
-        Ajouter l&apos;année scolaire
-      </Button>
-      <Tables />
-      <Popup open={open} setOpen={setOpen} title="Ajoutez l'année scolaire">
-        <FormAnnee />
-      </Popup>
-    </MainCard>
+    <div>
+      <MainCard>
+        <Button type="primary" icon={<FolderAddOutlined />} size="large" onClick={() => setOpen(true)}>
+          Ajouter l&apos;année scolaire
+        </Button>
+        <Tables />
+        <Popup open={open} setOpen={setOpen} title="Ajoutez l'année scolaire">
+          <FormAnnee />
+        </Popup>
+      </MainCard>
+    </div>
   );
 }
 

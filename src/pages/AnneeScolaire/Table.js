@@ -6,11 +6,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Fab } from '@mui/material';
 import { EditOutlined, DownSquareOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DesactiverAnnee } from 'Redux/Annee';
-import { messages } from 'Control/Message';
+import DirectionSnackbar from 'Control/Message';
 import { CreateContexte } from 'Context';
 
 const Annee = () => {
   const annes = useSelector((state) => state.annee);
+  const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
   const deleteYear = async (id) => {
     const response = await deletes(`annee/${id}`);
@@ -19,7 +20,6 @@ const Annee = () => {
   const { user } = useContext(CreateContexte);
   const desactiverYear = async (id, valeur) => {
     const data = { id, valeur, codeEtablissement: user?.codeEtablissement };
-    console.log(data);
     dispatch(DesactiverAnnee(data));
   };
 
@@ -78,9 +78,9 @@ const Annee = () => {
   ];
 
   return (
-    <>
-      {annes.desactiver === 'rejected' ? messages(annes.desactiverError) : ''}
-      {annes.desactiver === 'success' ? messages('Modification effectuée') : ''}
+    <div>
+      {annes.desactiver === 'rejected' && <DirectionSnackbar open={open} setOpen={setOpen} message={annes.desactiverError} /> }
+      {annes.desactiver === 'success' && <DirectionSnackbar open={open} setOpen={setOpen} message="Opération effectuée" /> }
       {annes && (
         <div
           style={{
@@ -92,7 +92,8 @@ const Annee = () => {
           <DataGrid rows={annes.annee} columns={columns} pageSize={6} rowsPerPageOptions={[6]} checkboxSelection />
         </div>
       )}
-    </>
+
+    </div>
   );
 };
 export default Annee;

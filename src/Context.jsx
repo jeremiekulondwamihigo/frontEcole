@@ -8,15 +8,20 @@ export const CreateContexte = createContext();
 
 const ContexteAll = (props) => {
   const [user, setUser] = React.useState();
-  const loadingUser = async () => {
-    try {
-      const response = await axios.get(`${lien_read}/user`, config);
-      if (response.data) {
-        setUser(response.data);
-      }
-    } catch (error) {
-      console.log(error.response.data);
-    }
+  const [showDataClasseSelect, setShowDataClasseSelect] = React.useState('');
+  const loadingUser = () => {
+    axios
+      .get(`${lien_read}/user`, config)
+      .then((response) => {
+        if (response.data) {
+          setUser(response.data);
+        }
+      })
+      .catch(function (err) {
+        if (err.code === 'ERR_NETWORK') {
+          console.log('Connection not found');
+        }
+      });
   };
 
   React.useEffect(() => {
@@ -32,7 +37,9 @@ const ContexteAll = (props) => {
     <CreateContexte.Provider
       value={{
         user,
-        LogOut
+        LogOut,
+        showDataClasseSelect,
+        setShowDataClasseSelect
       }}
     >
       {props.children}

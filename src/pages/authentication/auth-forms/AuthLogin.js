@@ -30,7 +30,7 @@ import AnimateButton from 'components/@extended/AnimateButton';
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { lien_create } from 'utils/Liens';
-import { messages } from 'Control/Message';
+import DirectionSnackbar from 'Control/Message';
 import { useNavigate } from 'react-router-dom';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -44,6 +44,13 @@ const AuthLogin = () => {
   };
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState(true);
+
+  const showMessage = (messages) => {
+    setMessage(messages);
+    setOpen(true);
   };
 
   return (
@@ -65,7 +72,7 @@ const AuthLogin = () => {
               localStorage.setItem('token', reponse.data.tokenLogin.token);
               navigation('/dashboard/default');
             } else {
-              messages(reponse.data);
+              showMessage(response.data);
               setStatus({ success: false });
               setSubmitting(false);
             }
@@ -178,6 +185,7 @@ const AuthLogin = () => {
           </form>
         )}
       </Formik>
+      {open && <DirectionSnackbar open={open} setOpen={setOpen} message={message} />}
     </>
   );
 };

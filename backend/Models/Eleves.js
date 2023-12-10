@@ -1,12 +1,11 @@
 const mongoose = require('mongoose')
-
 const schema = new mongoose.Schema({
   id: {
     type: String,
     required: true,
     unique: true,
   },
-  code_eleve: {
+  codeEleve: {
     type: String,
     required: true,
     unique: true,
@@ -17,7 +16,7 @@ const schema = new mongoose.Schema({
     trim: true,
     uppercase: true,
   },
-  postNom: {
+  postnom: {
     type: String,
     required: true,
     trim: true,
@@ -29,15 +28,12 @@ const schema = new mongoose.Schema({
     trim: true,
     uppercase: true,
   },
-  codeTuteur: {
+  contactTuteur: {
     type: String,
     required: false,
     default: '',
   },
-  code_parent:{
-    type:String, required:false, default:""
-  },
-  date_Naissance: {
+  date_naissance: {
     type: String,
     required: false,
     default: '',
@@ -58,24 +54,9 @@ const schema = new mongoose.Schema({
     required: false,
     default: '',
   },
-  libre: {
-    type: Boolean,
-    required: true,
-    default: true,
-    //Quand il sera enregistrer dans une établissement cette valeur prendra la valeur false
-  },
-  codeEtablissement: {
-    type: String,
-    required: true,
-  }, //Code de l'établissement effectuant l'enregistrement
-  codeInscription: {
-    type: String,
-    required: true,
-    //Ce code est générer automatiquement pour chaque cloture de l'année, Ce code permettra d'inscrire l'élève
-  },
   nationalite: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     uppercase: true,
   },
@@ -103,10 +84,11 @@ const schema = new mongoose.Schema({
     trim: true,
     uppercase: true,
   },
-  fichierSante : {
-    type:Array,
-    required:false,
-  }
+}, { timestamps : true, toJSON : { virtuals : true}})
+
+
+schema.virtual("fullname").get(function(){
+  return this.nom+' '+this.postnom+' '+this.prenom
 })
 
 const model = mongoose.model('Eleve', schema)

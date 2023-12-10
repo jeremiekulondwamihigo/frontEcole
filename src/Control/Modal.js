@@ -1,7 +1,6 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
+import { Dialog, Typography, DialogTitle, DialogContent } from '@mui/material';
 import Slide from '@mui/material/Slide';
 import { CloseOutlined } from '@ant-design/icons';
 
@@ -24,7 +23,9 @@ function Popup({ open, children, setOpen, title }) {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h5 style={{ fontSize: '12px' }}>{title}</h5>
+          <Typography sx={{ fontSize: '12px' }} component="p">
+            {title}
+          </Typography>
           <CloseOutlined fontSize="small" color="secondary" style={{ cursor: 'pointer' }} onClick={() => setOpen(false)} />
         </DialogTitle>
         <DialogContent>{children}</DialogContent>

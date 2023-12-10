@@ -21,9 +21,6 @@ const valeur_Annee = new mongoose.Schema({
     type: String,
     required: true,
   },
-  codeEtablissement : {
-    type:String, required:true
-  }
 
 });
 
