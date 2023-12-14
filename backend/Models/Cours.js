@@ -23,6 +23,7 @@ const schemaCours = new mongoose.Schema({
     required: true,
     default: true,
   },
+  idEnseignant : {type:String, required:false},
   identifiant: { type: String, required: false, default: undefined }, //code domaine ou sous-domaine si option = education de base
 })
 let valeur = mongoose.model('Cours', schemaCours)

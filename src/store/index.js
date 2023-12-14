@@ -8,6 +8,7 @@ import { getOption } from 'Redux/Option';
 import reducers from './reducers';
 import { readCours } from 'Redux/Cours';
 import { readEleve } from 'Redux/EleveInf';
+import { readInscrit } from 'Redux/Inscrit';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
@@ -21,5 +22,6 @@ dispatch(readAllYear());
 dispatch(getOption());
 dispatch(readCours());
 dispatch(readEleve());
+dispatch(readInscrit());
 
 export { store, dispatch };

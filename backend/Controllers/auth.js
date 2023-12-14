@@ -1,59 +1,61 @@
-const Model_User = require("../Models/Users");
-const jwt = require("jsonwebtoken");
-const Model_Etablissement = require("../Models/Model_Etablissement");
-const { ObjectId } = require("mongodb");
+const Model_User = require('../Models/Users')
+const jwt = require('jsonwebtoken')
+const Model_Etablissement = require('../Models/Model_Etablissement')
+const Model_EnsParent = require('../Models/Ens_Parent')
+const { ObjectId } = require('mongodb')
 
 exports.login = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body
 
-  if (!email || !password) {
-    return next(new ErrorResponse("Veuillez renseigner les champs", 200));
+  if (!username || !password) {
+    return res.status(200).json('Veuillez renseigner les champs')
   }
-
   try {
     //const user = await Model_User.aggregate([ look])
-
-    const user = await Model_User.findOne({ username : email }).select("+password");
+    const user = await Model_User.findOne({ username }).select('+password')
 
     if (!user) {
-      return next(new ErrorResponse("email incorrect", 200));
+      return res.status(200).json('username incorrect')
     }
 
-    const isMatch = await user.matchPasswords(password);
+    const isMatch = await user.matchPasswords(password)
 
     if (!isMatch) {
-      return next(new ErrorResponse("password incorrect", 200));
+      return res.status(200).json('password incorrect')
     }
-
-    sendToken(user, 200, res);
+    sendToken(user, 200, res)
   } catch (error) {
-    res.status(404).json({ success: false, error: error.message });
+    return res.status(200).json('Erreur')
   }
-};
+}
 
 const sendToken = (user, statusCode, res) => {
-  const token = user.getSignedToken();
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const look_agent = {
-    $lookup: {
-      from: "agents",
-      localField: "code_agent",
-      foreignField: "code_agent",
-      as: "agent",
-    },
-  };
-    Model_Etablissement.aggregate([
-      { $match: { _id: new ObjectId(decoded.id) } },
-      look_agent,
-    ])
+  const token = user.getSignedToken()
+  const decoded = jwt.verify(token, process.env.JWT_SECRET)
+  console.log(decoded.id)
+  if (['parent', 'enseignant'].includes(decoded.fonction)) {
+    Model_EnsParent.findOne({_id : new ObjectId(decoded.id)})
+    .then((userLog) => {
+      console.log(userLog)
+      return res.status(statusCode).json({
+        data: { fonction: decoded.fonction, data: userLog },
+        token,
+      })
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+
+  } else {
+    Model_Etablissement.findById(decoded.id)
       .then((login) => {
         return res.status(statusCode).json({
-          data: { fonction: decoded.fonction, data: login[0] },
-          tokenLogin: { token },
-        });
+          data: { fonction: decoded.fonction, data: login },
+          token,
+        })
       })
       .catch(function (error) {
-        console.log(error);
-      });
-  
-};
+        console.log(error)
+      })
+  }
+}

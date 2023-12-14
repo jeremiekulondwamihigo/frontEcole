@@ -4,40 +4,21 @@ const { protect } = require('../middleware/auth')
 
 const { login } = require('../Controllers/auth')
 
-const multer = require('multer')
 const { Add_Annee } = require('../Controllers/Setting_Annee')
 const { addOption } = require('../Controllers/Option')
 const { AddClasse } = require('../Controllers/Classe')
 const { Cours } = require('../Controllers/Cours')
 const { PremEnregistrement, Inscription } = require('../Controllers/Eleve')
-
-var storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'Images/')
-  },
-  filename: (req, file, cb) => {
-    const image = file.originalname.split('.')
-
-    cb(null, `${Date.now()}.${image[1]}`)
-  },
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname)
-
-    if (ext !== '.jpg' || ext !== '.png') {
-      return cb(res.status(400).end('only jpg, png are allowed'), false)
-    }
-    cb(null, true)
-  },
-})
-var upload = multer({ storage: storage })
+const { AddParent } = require('../Controllers/Parent')
 
 //PARAMETRES
 router.post('/annee', protect, Add_Annee)
 router.post('/option', protect, addOption)
 router.post('/classe', protect, AddClasse)
 router.post('/cours', protect, Cours)
-router.post('/infoEleve', PremEnregistrement)
-router.post("/inscription", Inscription)
+router.post('/infoEleve', protect, PremEnregistrement)
+router.post("/inscription", protect, Inscription)
+router.post("/parent", AddParent)
 
 //FIN TUTEUR
 router.post('/login', login)

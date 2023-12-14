@@ -10,7 +10,7 @@ import Inscription from './Inscription';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import './style.css';
-import { lien_image } from 'utils/Liens';
+import TableEleve from './TableEleve';
 
 // sales report status
 const avatarSX = {
@@ -97,18 +97,11 @@ function Eleve() {
                     return (
                       <ListItemButton divider key={index._id}>
                         <ListItemAvatar>
-                          <Avatar
-                            sx={{
-                              color: 'success.main',
-                              bgcolor: 'success.lighter'
-                            }}
-                          >
-                            {index.filename ? <img src={`${lien_image}/${index.filename}`} alt={index.nom} /> : <UserOutlined />}
-                          </Avatar>
+                          <Avatar alt="avat" src={index.filename ? index.filename : <UserOutlined />} />
                         </ListItemAvatar>
                         <ListItemText
                           primary={<Typography variant="subtitle1">{index.fullname}</Typography>}
-                          secondary={`code : ${index.codeEleve} tut : ${index.contactTuteur}`}
+                          secondary={`code : ${index.codeEleve}  ${index.contactTuteur && 'Tél tuteur : ' + index.contactTuteur}`}
                         />
                       </ListItemButton>
                     );
@@ -120,6 +113,9 @@ function Eleve() {
             </List>
           </MainCard>
         </Grid>
+        <MainCard sx={{ mt: 2 }} content={false}>
+          <TableEleve />
+        </MainCard>
       </Grid>
       <Popup open={open} setOpen={setOpen} title="Inscription">
         <Inscription />

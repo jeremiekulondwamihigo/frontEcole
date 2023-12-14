@@ -10,14 +10,6 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  code_province: {
-    type: String,
-    required: true,
-  },
-  code_agent: {
-    type: String,
-    required: true,
-  },
   codeEtablissement: {
     type: String,
     required: true,
@@ -32,7 +24,6 @@ const schema = new mongoose.Schema({
   },
 
   code_option: { type: Array, required: false, default: ["Education de Base"] },
-  code_enseignant: { type: Array, required: false, default: [] },
   periode: {
     type: String,
     required: true,

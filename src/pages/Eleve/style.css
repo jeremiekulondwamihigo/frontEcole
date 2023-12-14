@@ -5,3 +5,23 @@
   #chartStatEleve{
     margin-top: -40px;
   }
+  .containerClasse{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .containerClasse >div{
+    background-color: #dedede;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .containerClasse >div:hover{
+    background-color: #d6b4b4;
+    transition: 0.5s all ease-in;
+  }
+  .containerClasse >div >p{
+    padding: 5px 30px;
+    margin: 0;
+  }

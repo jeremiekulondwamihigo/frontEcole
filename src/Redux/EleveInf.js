@@ -117,6 +117,7 @@ const eleve = createSlice({
         deleteEleveError: ''
       };
     }
+    // eslint-disable-next-line no-unused-vars
 
     // eslint-disable-next-line no-unused-vars
   }

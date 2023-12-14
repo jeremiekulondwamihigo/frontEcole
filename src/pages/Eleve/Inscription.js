@@ -5,7 +5,7 @@ import Reinscription from './Reinscription';
 
 function Inscription() {
   const title = [
-    { id: 0, label: 'Nouvelle inscription' },
+    { id: 0, label: 'Information' },
     { id: 1, label: 'inscription' }
   ];
   const component = [

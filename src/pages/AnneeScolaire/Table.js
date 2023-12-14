@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { deletes } from 'utils/Liens';
 import { DataGrid } from '@mui/x-data-grid';
@@ -79,8 +79,8 @@ const Annee = () => {
 
   return (
     <div>
-      {annes.desactiver === 'rejected' && <DirectionSnackbar open={open} setOpen={setOpen} message={annes.desactiverError} /> }
-      {annes.desactiver === 'success' && <DirectionSnackbar open={open} setOpen={setOpen} message="Opération effectuée" /> }
+      {annes.desactiver === 'rejected' && <DirectionSnackbar open={open} setOpen={setOpen} message={annes.desactiverError} />}
+      {annes.desactiver === 'success' && <DirectionSnackbar open={open} setOpen={setOpen} message="Opération effectuée" />}
       {annes && (
         <div
           style={{
@@ -92,7 +92,6 @@ const Annee = () => {
           <DataGrid rows={annes.annee} columns={columns} pageSize={6} rowsPerPageOptions={[6]} checkboxSelection />
         </div>
       )}
-
     </div>
   );
 };
