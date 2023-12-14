@@ -9,6 +9,8 @@ const Option = Loadable(lazy(() => import('pages/Option')));
 const AnneeScolaire = Loadable(lazy(() => import('pages/AnneeScolaire')));
 const Classe = Loadable(lazy(() => import('pages/Classe')));
 const Images = Loadable(lazy(() => import('pages/Image')));
+const Enseignant = Loadable(lazy(() => import('pages/Enseignant')));
+const Parent = Loadable(lazy(() => import('pages/Parent')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -31,6 +33,14 @@ const MainRoutes = {
     {
       path: '/upload/:id',
       element: <Images />
+    },
+    {
+      path: '/enseignant',
+      element: <Enseignant />
+    },
+    {
+      path: '/parent',
+      element: <Parent />
     }
   ]
 };

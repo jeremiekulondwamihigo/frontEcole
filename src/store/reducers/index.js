@@ -12,6 +12,6 @@ import inscrit from 'Redux/Inscrit';
 
 // ==============================|| COMBINE REDUCERS ||============================== //
 
-const reducers = combineReducers({ menu, annee, user, option, cours, eleveinfo, inscrit });
+const reducers = combineReducers({ menu, annee, user, option, cours, eleveinfo, inscrit, parent });
 
 export default reducers;

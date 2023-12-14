@@ -9,6 +9,7 @@ import reducers from './reducers';
 import { readCours } from 'Redux/Cours';
 import { readEleve } from 'Redux/EleveInf';
 import { readInscrit } from 'Redux/Inscrit';
+import { readParent } from 'Redux/Parent';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
@@ -23,5 +24,6 @@ dispatch(getOption());
 dispatch(readCours());
 dispatch(readEleve());
 dispatch(readInscrit());
+dispatch(readParent());
 
 export { store, dispatch };

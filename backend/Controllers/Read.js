@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const Model_Etablissement = require('../Models/Model_Etablissement')
-const ModelAgent = require('../Models/Model_Agent')
+const ModelAgent = require('../Models/Ens_Parent')
 
 module.exports = {
   readUser: async (req, res, next) => {
@@ -38,18 +38,13 @@ module.exports = {
             console.log(error)
           })
       }
-      if (decoded.fonction === 'ensparent') {
-        ModelAgent.findOne({ code_agent: decoded.concerner }).then(
-          (response) => {
-            if (response) {
-              return res.status(200).json({
-                data: { fonction: decoded.fonction, data: response[0] },
-                tokenLogin: { token },
-              })
-            } else {
-            }
-          },
-        )
+      if (['parent', 'enseignant'].includes(decoded.fonction)) {
+        ModelAgent.findById(decoded.id).then((response) => {
+          if (response) {
+            return res.status(200).json(response)
+          } else {
+          }
+        })
       }
     } catch (error) {
       return res.status(400).json(error.message)
