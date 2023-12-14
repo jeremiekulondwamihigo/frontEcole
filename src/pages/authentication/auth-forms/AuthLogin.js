@@ -46,35 +46,38 @@ const AuthLogin = () => {
     event.preventDefault();
   };
   const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(true);
+  // const [message, setMessage] = React.useState(true);
 
-  const showMessage = (messages) => {
-    setMessage(messages);
-    setOpen(true);
-  };
+  // const showMessage = (messages) => {
+  //   setMessage(messages);
+  //   setOpen(true);
+  // };
 
   return (
     <>
       <Formik
         initialValues={{
-          email: '',
+          username: '',
           password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
-          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+          username: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
             const reponse = await axios.post(`${lien_create}/login`, values);
-            if (reponse.data.tokenLogin) {
-              localStorage.setItem('token', reponse.data.tokenLogin.token);
-              navigation('/dashboard/default');
-            } else {
-              showMessage(response.data);
+            if (reponse.status === 201) {
               setStatus({ success: false });
+              setErrors({ submit: reponse.data });
               setSubmitting(false);
+            }
+            if (reponse.status === 200) {
+              if (reponse.data.info.fonction === 'etablissement' && reponse.data.token && reponse.data.info.user) {
+                localStorage.setItem('token', reponse.data.token);
+                navigation('/dashboard/default');
+              }
             }
           } catch (err) {
             setStatus({ success: false });
@@ -88,21 +91,21 @@ const AuthLogin = () => {
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Stack spacing={1}>
-                  <InputLabel htmlFor="email-login">Email Address</InputLabel>
+                  <InputLabel htmlFor="email-login">username</InputLabel>
                   <OutlinedInput
                     id="email-login"
-                    type="email"
-                    value={values.email}
-                    name="email"
+                    type="text"
+                    value={values.username}
+                    name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    placeholder="Enter email address"
+                    placeholder="Enter username"
                     fullWidth
-                    error={Boolean(touched.email && errors.email)}
+                    error={Boolean(touched.username && errors.username)}
                   />
-                  {touched.email && errors.email && (
+                  {touched.username && errors.username && (
                     <FormHelperText error id="standard-weight-helper-text-email-login">
-                      {errors.email}
+                      {errors.username}
                     </FormHelperText>
                   )}
                 </Stack>
