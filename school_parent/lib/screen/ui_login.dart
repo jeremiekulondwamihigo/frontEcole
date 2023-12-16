@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:school_parent/screen/ui_register.dart';
-
+import 'package:http/http.dart' as http;
 import 'ui_dashboard.dart';
 
 class LoginUiPage extends StatefulWidget {
@@ -12,6 +14,25 @@ class LoginUiPage extends StatefulWidget {
 }
 
 class _LoginUiPageState extends State<LoginUiPage> {
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  void loginUser() async {
+    final url = Uri.parse('http://192.168.88.230:5000/bulletin/create/login');
+    var response = await http.post(url,
+        body: ({
+          'password': '123456',
+          'username': '09838',
+        }));
+    if (response.statusCode == 200) {
+      final nom = response.body;
+      final result = jsonDecode(nom);
+      print(result);
+    } else {
+      print('Error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -106,11 +127,12 @@ class _LoginUiPageState extends State<LoginUiPage> {
                   padding: const EdgeInsets.only(bottom: 10),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DashboardPageUi(),
-                          ));
+                      loginUser();
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //       builder: (context) => const DashboardPageUi(),
+                      //     ));
                     },
                     child: Text(
                       'Connectez-vous',
