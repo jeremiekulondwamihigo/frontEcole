@@ -3,7 +3,7 @@ import { get, post } from 'utils/Liens';
 
 const initialState = {
   parent: [],
-  getParent: [],
+  getParent: '',
   getParentError: '',
   postParent: '',
   postParentError: ''
@@ -14,20 +14,20 @@ export const readParent = createAsyncThunk('parent/readParent', async (id, { rej
     const reponse = await get('parent');
     return reponse.data;
   } catch (error) {
-    return rejectWithValue(error.data.response);
+    return rejectWithValue(error.response.data);
   }
 });
-export const postParent = createAsyncThunk('parent/readParent', async (data, { rejectWithValue }) => {
+export const postParent = createAsyncThunk('parent/postParent', async (data, { rejectWithValue }) => {
   try {
     const reponse = await post('parent', data);
     return reponse.data;
   } catch (error) {
-    return rejectWithValue(error.data.response);
+    return rejectWithValue(error.response.data);
   }
 });
 
 const parent = createSlice({
-  name: 'eleve',
+  name: 'parent',
   initialState,
   reducers: {},
   extraReducers: {

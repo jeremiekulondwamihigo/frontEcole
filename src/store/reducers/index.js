@@ -9,9 +9,10 @@ import option from 'Redux/Option';
 import cours from 'Redux/Cours';
 import eleveinfo from 'Redux/EleveInf';
 import inscrit from 'Redux/Inscrit';
+import parents from 'Redux/Parent';
 
 // ==============================|| COMBINE REDUCERS ||============================== //
 
-const reducers = combineReducers({ menu, annee, user, option, cours, eleveinfo, inscrit, parent });
+const reducers = combineReducers({ menu, annee, user, option, cours, eleveinfo, inscrit, parents });
 
 export default reducers;

@@ -65,25 +65,31 @@ const AuthLogin = () => {
           username: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          try {
-            const reponse = await axios.post(`${lien_create}/login`, values);
-            if (reponse.status === 201) {
-              setStatus({ success: false });
-              setErrors({ submit: reponse.data });
-              setSubmitting(false);
-            }
-            if (reponse.status === 200) {
-              if (reponse.data.info.fonction === 'etablissement' && reponse.data.token && reponse.data.info.user) {
+        onSubmit={(values, { setErrors, setStatus, setSubmitting }) => {
+          axios
+            .post(`${lien_create}/login`, values)
+            .then((reponse) => {
+              if (reponse.status === 201) {
+                setStatus({ success: false });
+                setErrors({ submit: reponse.data });
+                setSubmitting(false);
+              }
+              if (
+                reponse.status === 200 &&
+                reponse.data.info.fonction === 'etablissement' &&
+                reponse.data.token &&
+                reponse.data.info.user
+              ) {
                 localStorage.setItem('token', reponse.data.token);
                 navigation('/dashboard/default');
+                
               }
-            }
-          } catch (err) {
-            setStatus({ success: false });
-            setErrors({ submit: err.message });
-            setSubmitting(false);
-          }
+            })
+            .catch(function () {
+              setStatus({ success: false });
+              setErrors({ submit: err.message });
+              setSubmitting(false);
+            });
         }}
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (

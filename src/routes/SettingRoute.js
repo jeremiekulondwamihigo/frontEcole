@@ -11,6 +11,7 @@ const Classe = Loadable(lazy(() => import('pages/Classe')));
 const Images = Loadable(lazy(() => import('pages/Image')));
 const Enseignant = Loadable(lazy(() => import('pages/Enseignant')));
 const Parent = Loadable(lazy(() => import('pages/Parent')));
+const Profile = Loadable(lazy(() => import('pages/Profile')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -41,6 +42,10 @@ const MainRoutes = {
     {
       path: '/parent',
       element: <Parent />
+    },
+    {
+      path: '/profile',
+      element: <Profile />
     }
   ]
 };

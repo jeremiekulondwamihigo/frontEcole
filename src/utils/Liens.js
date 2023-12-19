@@ -21,33 +21,17 @@ export const config = {
 };
 export const get = async (lien) => {
   const response = await axios.get(`${lien_read}/${lien}`, config);
-  if (response.data === false) {
-    console.log(response.data);
-  } else {
-    return response;
-  }
+  return response;
 };
 export const post = async (lien, data) => {
   const response = await axios.post(`${lien_create}/${lien}`, data, config);
-  if (response.data === false) {
-    console.log(response.data);
-  } else {
-    return response;
-  }
+  return response;
 };
 export const deletes = async (lien) => {
   const response = await axios.delete(`${lien_delete}/${lien}`, config);
-  if (response.data === false) {
-    console.log(response.data);
-  } else {
-    return response;
-  }
+  return response;
 };
 export const put = async (lien, data) => {
   const response = await axios.put(`${lien_update}/${lien}`, data, config);
-  if (response.data === false) {
-    console.log(response.data);
-  } else {
-    return response;
-  }
+  return response;
 };

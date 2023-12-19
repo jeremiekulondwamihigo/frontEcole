@@ -5,14 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 // assets
-import {
-  MoneyCollectOutlined,
-  CalendarOutlined,
-  FormatPainterOutlined,
-  BorderTopOutlined,
-  ScheduleOutlined,
-  UnorderedListOutlined
-} from '@ant-design/icons';
+import { MoneyCollectOutlined, CalendarOutlined, FormatPainterOutlined, BorderTopOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
 // ==============================|| HEADER PROFILE - SETTING TAB ||============================== //
 
@@ -57,17 +50,11 @@ const SettingTab = () => {
         </ListItemIcon>
         <ListItemText primary="Option" />
       </ListItemButton>
-      <ListItemButton selected={selectedIndex === 1} onClick={(event) => handleListItemClick(event, 1)}>
-        <ListItemIcon>
-          <ScheduleOutlined />
-        </ListItemIcon>
-        <ListItemText primary="Classe" />
-      </ListItemButton>
-      <ListItemButton selected={selectedIndex === 2} onClick={(event) => handleListItemClick(event, 2)}>
+      <ListItemButton selected={selectedIndex === 5} onClick={(event) => handleListItemClick(event, 5)}>
         <ListItemIcon>
           <FormatPainterOutlined />
         </ListItemIcon>
-        <ListItemText primary="Cours" />
+        <ListItemText primary="Affectation cours" />
       </ListItemButton>
       <ListItemButton selected={selectedIndex === 3} onClick={(event) => handleListItemClick(event, 3)}>
         <ListItemIcon>

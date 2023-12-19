@@ -208,6 +208,20 @@ module.exports = {
               })
           },
           function (annee, classe, done) {
+            ModelEleveInscrit.findOne({
+              codeEleve,
+              codeAnnee: annee.codeAnnee,
+            }).then((eleveFound) => {
+              if (eleveFound) {
+                return res
+                  .status(404)
+                  .json("L'élève est enregistré dans une autre classe")
+              } else {
+                done(null, annee, classe)
+              }
+            })
+          },
+          function (annee, classe, done) {
             ModelEleveInscrit.create({
               id: new Date(),
               codeEleve,
@@ -283,7 +297,6 @@ module.exports = {
   UpdateEleve: (req, res) => {
     try {
       const { id, data } = req.body
-      console.log(req.body)
       asyncLab.waterfall(
         [
           function (done) {
@@ -292,13 +305,13 @@ module.exports = {
                 if (result) {
                   done(null, result)
                 } else {
+                  console.log(result);
                   return res.status(404).json('Erreur')
                 }
               },
             )
           },
           function (result, done) {
-            console.log(result)
             ModelEleveInscrit.aggregate([
               { $match: { codeEleve: result.codeEleve } },
               lookAnnee,

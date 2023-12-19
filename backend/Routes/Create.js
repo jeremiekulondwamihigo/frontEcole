@@ -10,6 +10,7 @@ const { AddClasse } = require('../Controllers/Classe')
 const { Cours } = require('../Controllers/Cours')
 const { PremEnregistrement, Inscription } = require('../Controllers/Eleve')
 const { AddParent } = require('../Controllers/Parent')
+const { AddPeriode } = require('../Controllers/Periode')
 
 //PARAMETRES
 router.post('/annee', protect, Add_Annee)
@@ -18,7 +19,8 @@ router.post('/classe', protect, AddClasse)
 router.post('/cours', protect, Cours)
 router.post('/infoEleve', protect, PremEnregistrement)
 router.post("/inscription", protect, Inscription)
-router.post("/parent", AddParent)
+router.post("/parent", protect, AddParent)
+router.post("/periode", protect, AddPeriode)
 
 //FIN TUTEUR
 router.post('/login', login)

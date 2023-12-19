@@ -7,6 +7,8 @@ import { FormHelperText, Grid, Button, OutlinedInput, Stack } from '@mui/materia
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import AnimateButton from 'components/@extended/AnimateButton';
+import { dispatch } from 'store/index';
+import { postParent } from 'Redux/Parent';
 
 // project import
 
@@ -21,7 +23,8 @@ const FormulaireEnseignant = () => {
         initialValues={{
           nom: '',
           telephone: '',
-          submit: null
+          submit: null,
+          status: 'enseignant'
         }}
         validationSchema={Yup.object().shape({
           nom: Yup.string().max(255).required("Entrez le nom de l'enseignant"),
@@ -29,7 +32,7 @@ const FormulaireEnseignant = () => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            console.log(values);
+            dispatch(postParent(values));
           } catch (error) {
             setStatus({ success: false });
             setErrors({ submit: err.message });

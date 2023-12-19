@@ -31,6 +31,9 @@ app.use("/image", express.static(path.resolve(__dirname, "Images")));
 app.use("/fichier", express.static(path.resolve(__dirname, "Fichiers")));
 
 // Error Handler  ()
+app.use(function(err, req, res, next){
+    console.log(err);
+})
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("server running " + PORT));

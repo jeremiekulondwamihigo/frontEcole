@@ -18,3 +18,7 @@ export const EnLettre = (value) => {
     return 'Huitieme';
   }
 };
+export const dateFrancais = (donner) => {
+  let dates = new Date(donner);
+  return `${dates.getDate()}/${dates.getMonth() + 1}/${dates.getFullYear()}`;
+};

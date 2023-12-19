@@ -12,6 +12,7 @@ import Popup from 'Control/Modal';
 import Cours from 'pages/Cours';
 import Affichage from './Affichage';
 import { CreateContexte } from 'Context';
+import MainCard from 'components/MainCard';
 
 function Index() {
   const { id } = useParams();
@@ -52,10 +53,10 @@ function Index() {
   }, [id, option]);
 
   return (
-    <>
-      <Grid container spacing={1}>
+    <MainCard>
+      <Grid container>
         {option && classe && (
-          <Grid lg={2}>
+          <Grid item lg={2}>
             <Dropdown overlay={<Menu onClick={(e) => clockOption(e.key)} items={classe}></Menu>} trigger={['contextMenu']}>
               <div className={option[0].active ? 'greenBackground' : 'redBackground'}>
                 <Typography sx={{ fontSize: '12px' }} noWrap>
@@ -66,11 +67,11 @@ function Index() {
           </Grid>
         )}
       </Grid>
-      <Grid container spacing={1}>
-        <Grid lg={2} sx={{ marginTop: '20px' }}>
+      <Grid container>
+        <Grid item lg={4}>
           {classeSelect && <Cours />}
         </Grid>
-        <Grid lg={10}>
+        <Grid item lg={8}>
           {' '}
           <Affichage />
         </Grid>
@@ -78,7 +79,7 @@ function Index() {
       <Popup open={open} setOpen={setOpen} title="Ajoutez une classe">
         <FormClasse codeOption={id} />
       </Popup>
-    </>
+    </MainCard>
   );
 }
 export default memo(Index);

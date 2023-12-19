@@ -4,12 +4,12 @@ const { protect } = require('../middleware/auth')
 const { Modificate_Year } = require('../Controllers/Setting_Annee')
 const { updateOption } = require('../Controllers/Option')
 const { UpdateEleve } = require('../Controllers/Eleve')
-const { AffecterEleve, infoEleve } = require('../Controllers/Parent')
+const { AffecterEleve, InfoEleve } = require('../Controllers/Parent')
 
 router.put('/annee/:id', protect, Modificate_Year)
 router.put("/option", protect, updateOption)
 router.put("/infoEleve", protect, UpdateEleve)
 router.put("/parentEleve", protect, AffecterEleve)
-router.put('/parentUpdateEleve', protect, infoEleve)
+router.put('/parentUpdateEleve', protect, InfoEleve)
 
 module.exports = router
