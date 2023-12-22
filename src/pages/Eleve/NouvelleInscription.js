@@ -77,7 +77,7 @@ const NouvelleInscription = () => {
                   <Grid item xs={12} lg={6} key={index.id}>
                     <Stack spacing={1}>
                       <OutlinedInput
-                        id="nom"
+                        id={index.value}
                         type={index.type ? index.type : 'text'}
                         value={values['' + index.value]}
                         name={`${index.value}`}
@@ -88,7 +88,7 @@ const NouvelleInscription = () => {
                         error={Boolean(touched['' + index.value] && errors['' + index.value])}
                       />
                       {touched['' + index.value] && errors['' + index.value] && (
-                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                        <FormHelperText error id={`standard-weight-helper-text${index.value}`}>
                           {errors['' + index.value]}
                         </FormHelperText>
                       )}

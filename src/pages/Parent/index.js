@@ -16,6 +16,11 @@ function Index() {
 
   const columns = [
     {
+      field: 'code',
+      headerName: 'ID',
+      width: 140
+    },
+    {
       field: 'nom',
       headerName: 'Nom complet',
       width: 190
@@ -23,13 +28,13 @@ function Index() {
     {
       field: 'telephone',
       headerName: 'Contact',
-      width: 180
+      width: 150
     },
 
     {
       field: 'eleves',
       headerName: 'Eleves',
-      width: 130,
+      width: 80,
       renderCell: (params) => {
         return params.row.eleveListe.length > 0 ? params.row.eleveListe.length : 'Aucun';
       }

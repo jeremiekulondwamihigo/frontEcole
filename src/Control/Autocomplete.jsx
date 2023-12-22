@@ -47,9 +47,9 @@ function AutoComplement(props) {
           return option.inputValue;
         }
         // Regular option
-        return option.fullname;
+        return option.fullname || option.nom;
       }}
-      renderOption={(props, option) => <li {...props}>{option.fullname}</li>}
+      renderOption={(props, option) => <li {...props}>{option.fullname || option.nom}</li>}
       sx={{ width: '100%' }}
       freeSolo
       renderInput={(params) => <TextField {...params} label={title || 'Titre'} />}

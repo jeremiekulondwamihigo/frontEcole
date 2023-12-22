@@ -89,7 +89,7 @@ const FormClasse = ({ codeOption }) => {
               <Grid item xs={12}>
                 <Stack>
                   <OutlinedInput
-                    id="indexe"
+                    id="titulaire"
                     type="text"
                     value={values.titulaire}
                     name="titulaire"

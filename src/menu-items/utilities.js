@@ -29,8 +29,9 @@ const utilities = {
       id: 'echeance',
       title: 'Echéance',
       type: 'item',
-      url: '/typography',
-      icon: icons.FontSizeOutlined
+      url: '/echeance',
+      icon: icons.FontSizeOutlined,
+      breadcrumbs: false
     },
     {
       id: 'payement',

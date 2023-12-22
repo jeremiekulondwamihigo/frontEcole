@@ -3,7 +3,7 @@ const { generateString } = require('../Fonctions/Static_Function')
 const modelOption = require('../Models/Option')
 const asyncLab = require('async')
 
-exports.addOption = (req, res) => {
+exports.addOption = (req, res, next) => {
   try {
     const { option } = req.body
     if (!option) {
@@ -45,28 +45,9 @@ exports.addOption = (req, res) => {
             })
         },
         function (option, done) {
-          modelOption
-            .aggregate([
-              {
-                $match: { _id: new ObjectId(option._id) },
-              },
-              {
-                $lookup: {
-                  from: 'classes',
-                  localField: 'codeOption',
-                  foreignField: 'codeOption',
-                  as: 'classe',
-                },
-              },
-            ])
-            .then((options) => {
-              if (options) {
-                done(options)
-              }
-            })
-            .catch(function (err) {
-              console.log(err)
-            })
+         
+          req.recherche = option.codeOption;
+          next()
         },
       ],
       function (result) {
@@ -82,9 +63,15 @@ exports.addOption = (req, res) => {
   }
 }
 ;(exports.readOption = (req, res) => {
+  let codeOption = req.recherche
+  let match = codeOption
+    ? { $match: { codeOption: codeOption } }
+    : { $match: {} }
+    console.log(codeOption)
   try {
     modelOption
       .aggregate([
+        match,
         {
           $lookup: {
             from: 'classes',
@@ -95,7 +82,9 @@ exports.addOption = (req, res) => {
         },
       ])
       .then((options) => {
-        return res.status(200).json(options.reverse())
+        return codeOption
+          ? res.status(200).json(options[0])
+          : res.status(200).json(options.reverse())
       })
       .catch(function (err) {
         console.log(err)

@@ -11,6 +11,7 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 // render - utilities
 const Eleves = Loadable(lazy(() => import('pages/Eleve')));
+const Echeance = Loadable(lazy(() => import('pages/Echeance')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -35,6 +36,10 @@ const MainRoutes = {
     {
       path: 'eleve',
       element: <Eleves />
+    },
+    {
+      path: 'echeance',
+      element: <Echeance />
     }
   ]
 };

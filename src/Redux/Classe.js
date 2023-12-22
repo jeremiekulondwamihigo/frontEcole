@@ -14,7 +14,6 @@ const initialState = {
 export const postClasse = createAsyncThunk('classe/postClasse', async (datas, { rejectWithValue }) => {
   try {
     const response = await post('classe', datas);
-    console.log(response);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.reponse.data);

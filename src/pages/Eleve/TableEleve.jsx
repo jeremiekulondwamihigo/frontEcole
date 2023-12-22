@@ -39,7 +39,7 @@ function TableEleve({ classe }) {
       renderCell: (params) => {
         return (
           <Avatar
-            alt="avat"
+            alt={params.row.eleve.nom.substr(0, 1)}
             onClick={() => openImages(params.row.eleve._id)}
             src={params.row.eleve.filename ? params.row.eleve.filename : <UserOutlined />}
           />
@@ -67,7 +67,7 @@ function TableEleve({ classe }) {
     {
       field: 'eleve.genre',
       headerName: 'Genre',
-      width: 100,
+      width: 50,
       renderCell: (params) => {
         return params.row.eleve.genre;
       }
@@ -131,7 +131,7 @@ function TableEleve({ classe }) {
       renderCell: (params) => {
         return (
           <Avatar
-            alt="avat"
+            alt={params.row.eleve.nom.substr(0, 1)}
             onClick={() => openImages(params.row.eleve._id)}
             src={params.row.eleve.filename ? params.row.eleve.filename : <UserOutlined />}
           />
@@ -189,11 +189,7 @@ function TableEleve({ classe }) {
       }
     }
   ];
-  return (
-    <div style={{ height: 450 }}>
-      {data && <DataGrid rows={data} columns={classe ? columnClasse : column} pageSize={5} rowsPerPageOptions={[5]} />}
-    </div>
-  );
+  return <div>{data && <DataGrid rows={data} columns={classe ? columnClasse : column} pageSize={5} rowsPerPageOptions={[5]} />}</div>;
 }
 
 export default TableEleve;

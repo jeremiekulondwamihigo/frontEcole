@@ -11,6 +11,8 @@ const schema = new mongoose.Schema(
     niveau :{type:String, required:false },
     domaine :{type:String, required:false },
     fonction :{type:String, required:false },
+    code : { type:String, required:true},
+    filename : {type:String, required:false}
   },
   { timestamps: true },
 )

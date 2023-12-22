@@ -11,6 +11,7 @@ const {
   ListeParentEnseignant,
 } = require('../Controllers/Parent')
 const { ReadPeriode } = require('../Controllers/Periode')
+const { readTitle } = require('../Controllers/TitreFrais')
 
 //FIN NOUVELLE VERSION
 
@@ -23,6 +24,7 @@ router.get('/inscrit', protect, ReadInscrit)
 router.get('/parentListeDesEleve/:id', ListeDesEleve)
 router.get('/periode', protect, ReadPeriode)
 router.get('/parent', protect, ListeParentEnseignant)
+router.get("/titleFrais", protect, readTitle)
 
 //FIN ETABLISSEMENT
 

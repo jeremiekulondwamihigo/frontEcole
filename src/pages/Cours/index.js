@@ -1,4 +1,4 @@
-// import AddCours from './AddCours';
+import './style.css';
 import { Grid, Fab, Tooltip } from '@mui/material';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
@@ -7,13 +7,20 @@ import { CreateContexte } from 'Context';
 import AddCours from './AddCours';
 import { DataGrid } from '@mui/x-data-grid';
 import Popup from 'Control/Modal';
-
 import { FileDoneOutlined } from '@ant-design/icons';
 
 function Index() {
   const [open, setOpen] = useState(false);
+  const [openModifier, setOpenModifier] = useState(false);
   const { showDataClasseSelect } = useContext(CreateContexte);
   const coursclasse = useSelector((state) => _.filter(state.cours.cours, { codeClasse: showDataClasseSelect }));
+  const [coursSelect, setCoursSelect] = useState();
+
+  const openPopup = (e, index) => {
+    e.preventDefault();
+    setCoursSelect(index);
+    setOpenModifier(true);
+  };
   const columnClasse = [
     {
       field: 'branche',
@@ -24,7 +31,7 @@ function Index() {
           <>
             {params.row.branche}
             <br />
-            maxima : {params.row.maxima}points examen validé
+            maxima : {params.row.maxima}points {params.row.validExamen ? 'valide examen' : "y a pas l'examen"}
           </>
         );
       }
@@ -33,18 +40,18 @@ function Index() {
       field: 'enseignant',
       headerName: 'Enseignant',
       width: 80,
-      renderCell: () => {
-        return <>JEREMIE MIHIGO</>;
+      renderCell: (params) => {
+        return <>{params.row.enseignant.length > 0 ? params.row.enseignant[0].nom : ''}</>;
       }
     },
     {
       field: 'action',
       headerName: 'Action',
       width: 50,
-      renderCell: () => {
+      renderCell: (params) => {
         return (
           <Tooltip title="Modifiez le cours">
-            <Fab size="small" color="primary">
+            <Fab size="small" color="primary" onClick={(e) => openPopup(e, params.row)}>
               <FileDoneOutlined />{' '}
             </Fab>
           </Tooltip>
@@ -54,12 +61,21 @@ function Index() {
   ];
   return (
     <>
+      <Fab size="small" color="primary" onClick={() => setOpen(true)}>
+        <FileDoneOutlined />
+      </Fab>
       <Grid>
-        {coursclasse && <DataGrid rows={coursclasse} columns={columnClasse} pageSize={5} rowsPerPageOptions={[5]} />}
-        {/* <AddCours /> */}
+        {coursclasse && (
+          <div className="cours">
+            <DataGrid rows={coursclasse} columns={columnClasse} pageSize={6} rowsPerPageOptions={[6]} />
+          </div>
+        )}
       </Grid>
       <Popup open={open} setOpen={setOpen} title="Ajoutez un cours">
         <AddCours />
+      </Popup>
+      <Popup open={openModifier} setOpen={setOpenModifier} title="Modifiez un cours">
+        <AddCours cour={coursSelect} />
       </Popup>
     </>
   );

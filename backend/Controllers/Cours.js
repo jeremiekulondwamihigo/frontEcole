@@ -17,19 +17,31 @@ let sousdomaine = {
     as: 'sousdomaine',
   },
 }
+let enseignantCours = {
+  $lookup: {
+    from: 'parents',
+    localField: 'idEnseignant',
+    foreignField: 'code',
+    as: 'enseignant',
+  },
+}
 
 module.exports = {
   ReadCoursSimple: (req, res) => {
+    let idCours = req.recherche
+    let match = idCours
+      ? { $match: { idCours: idCours.idCours } }
+      : { $match: {} }
     modelCours
-      .aggregate([rdomaine, sousdomaine])
+      .aggregate([match, rdomaine, sousdomaine, enseignantCours])
       .then((response) => {
-        return res.send(response)
+        return idCours ? res.send(response[0]) : res.send(response)
       })
       .catch(function (err) {
         console.log(err)
       })
   },
-  Cours: (req, res) => {
+  Cours: (req, res, next) => {
     try {
       const {
         codeClasse,
@@ -39,10 +51,8 @@ module.exports = {
         branche,
         maxima,
       } = req.body
-      console.log(req.body);
 
       const date = new Date().getTime()
-      console.log(date);
       if (!branche || !maxima || !codeClasse || !date) {
         return res.status(404).json('Veuillez remplir les champs')
       }
@@ -62,22 +72,15 @@ module.exports = {
                 branche,
                 maxima,
                 codeClasse,
-                id : date,
+                id: date,
                 idCours: date,
                 validExamen,
                 identifiant,
               })
               .then((Save) => {
                 if (Save) {
-                  let match = { $match: { _id: Save._id } }
-                  modelCours
-                    .aggregate([match, rdomaine, sousdomaine])
-                    .then((response) => {
-                      return res.status(200).json(response[0])
-                    })
-                    .catch(function (err) {
-                      console.log(err)
-                    })
+                  req.recherche = { idCours: Save.idCours }
+                  next()
                 } else {
                   return res.status(404).json("Erreur d'enregistrement")
                 }
@@ -94,7 +97,7 @@ module.exports = {
       return res.status(404).json('error : ' + error)
     }
   },
-  ModifierCours: (req, res) => {
+  ModifierCours: (req, res, next) => {
     const { id, data } = req.body
 
     if (!id || !data) {
@@ -105,16 +108,8 @@ module.exports = {
       .findByIdAndUpdate(id, data, { new: true })
       .then((modification) => {
         if (modification) {
-          let match = { $match: { _id: modification._id } }
-
-          modelCours
-            .aggregate([match, rdomaine, sousdomaine, option])
-            .then((response) => {
-              return res.status(200).json(response[0])
-            })
-            .catch(function (err) {
-              console.log(err)
-            })
+          req.recherche = { idCours: modification.idCours }
+          next()
         } else {
           return res.status(404).json('Erreur de modification')
         }

@@ -24,14 +24,14 @@ function Index() {
     if (indexe === 'add') {
       setOpen(true);
     } else {
-      setClasseSelect(indexe);
+      setClasseSelect(_.filter(option[0].classe, { codeClasse: indexe }));
       setShowDataClasseSelect(indexe);
     }
   };
   const [classe, setClasse] = useState();
   const fetchClasse = () => {
     let data = [];
-    if (option && option[0].classe.length > 0) {
+    if (option.length > 0 && option[0].classe.length > 0) {
       for (let i = 0; i < option[0].classe.length; i++) {
         data.push({
           label: EnLettre(parseInt(option[0].classe[i].niveau)),
@@ -60,7 +60,7 @@ function Index() {
             <Dropdown overlay={<Menu onClick={(e) => clockOption(e.key)} items={classe}></Menu>} trigger={['contextMenu']}>
               <div className={option[0].active ? 'greenBackground' : 'redBackground'}>
                 <Typography sx={{ fontSize: '12px' }} noWrap>
-                  {option[0].option}
+                  {option[0].option} {classeSelect && 'Niveau ' + classeSelect[0].niveau + 'e' + classeSelect[0].indexe}
                 </Typography>
               </div>
             </Dropdown>

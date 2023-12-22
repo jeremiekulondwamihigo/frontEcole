@@ -4,9 +4,9 @@ const modelEleveInfo = require('../Models/Eleves')
 const modelUser = require('../Models/Users')
 const asyncLab = require('async')
 const modelAnnee = require('../Models/Model_Annee')
+const { generateNumber } = require('../Fonctions/Static_Function')
 
 exports.InfoEleve = (req, res) => {
-  console.log(req)
   try {
     const {
       nomPere,
@@ -154,10 +154,10 @@ exports.ListeDesEleve = (req, res) => {
     console.log(error)
   }
 }
-exports.AddParent = (req, res) => {
+exports.AddParent = (req, res, next) => {
   try {
     const { nom, telephone, status } = req.body
-    console.log(req.body)
+    const { codeEtablissement } = req.user
     if (!nom || !telephone) {
       return res
         .status(404)
@@ -180,8 +180,12 @@ exports.AddParent = (req, res) => {
           })
       },
       function (parents, done) {
+        let code =
+          status === 'parent'
+            ? 'PA' + new Date().getTime()
+            : `${codeEtablissement.substr(0, 3)}${generateNumber(5)}`
         modelParent
-          .create({ nom, telephone, status, id: new Date() })
+          .create({ nom, telephone, status, id: new Date(), code })
           .then((parent) => {
             done(null, parent)
           })
@@ -197,7 +201,8 @@ exports.AddParent = (req, res) => {
             })
             .then((userCreate) => {
               if (userCreate) {
-                return res.status(200).json(parent)
+                req.recherche = parent.code
+                next()
               } else {
                 return res.status(404).json("Erreur d'enregistrement")
               }
@@ -285,11 +290,42 @@ exports.DeleteEleve = (req, res) => {
   }
 }
 exports.ListeParentEnseignant = (req, res) => {
+  let code = req.recherche
+  let match = code ? { $match: { code: code } } : { $match: {} }
+  console.log(match, code)
   try {
-    modelParent.find({}).then((result) => {
-      if (result) {
-        console.log(result)
-        return res.status(200).json(result)
+    modelParent
+      .aggregate([
+        match,
+        {
+          $lookup: {
+            from: 'cours',
+            localField: 'code',
+            foreignField: 'idEnseignant',
+            as: 'cours',
+          },
+        },
+      ])
+      .then((result) => {
+        if (result) {
+          return code
+            ? res.status(200).json(result[0])
+            : res.status(200).json(result.reverse())
+        }
+      })
+  } catch (error) {
+    console.log(error)
+  }
+}
+exports.updateParent = (req, res, next) => {
+  try {
+    const { id, data } = req.body
+    modelParent.findByIdAndUpdate(id, data, { new: true }).then((response) => {
+      if (response) {
+        req.recherche = response.code
+        next()
+      } else {
+        return res.status(404).json('Erreur')
       }
     })
   } catch (error) {

@@ -116,3 +116,43 @@ const asyncLab = require('async')
       console.log(error)
     }
   })
+exports.updateClasse = (req, res, next) => {
+  try {
+    const { idClasse, codeEnseignant } = req.body
+    if (!idClasse || !codeEnseignant) {
+      return res.status(404).json("Précisez l'enseignant et la classe")
+    }
+    asyncLab.waterfall([
+      function (done) {
+        modelClasse
+          .findOne({ codeClasse: idClasse, active: true })
+          .then((classe) => {
+            if (classe) {
+              done(null, classe)
+            } else {
+              return res.status(404).json('Erreur')
+            }
+          })
+      },
+      function (classes, done) {
+        modelClasse
+          .findByIdAndUpdate(
+            classes._id,
+            { titulaire: codeEnseignant },
+            { new: true },
+          )
+          .then((classeupdate) => {
+            console.log(classes)
+            if (classeupdate) {
+              req.recherche = classes.codeOption
+              next()
+            } else {
+              return res.status(404).json('Erreur')
+            }
+          })
+      },
+    ])
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -10,6 +10,7 @@ import { readCours } from 'Redux/Cours';
 import { readEleve } from 'Redux/EleveInf';
 import { readInscrit } from 'Redux/Inscrit';
 import { readParent } from 'Redux/Parent';
+import { ReadTitle } from 'Redux/TitleFrais';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
@@ -25,5 +26,6 @@ dispatch(readCours());
 dispatch(readEleve());
 dispatch(readInscrit());
 dispatch(readParent());
+dispatch(ReadTitle());
 
 export { store, dispatch };

@@ -38,6 +38,14 @@ export const putOption = createAsyncThunk('option/putOption', async (datas, { re
     return rejectWithValue(error.reponse.data);
   }
 });
+export const putClasse = createAsyncThunk('option/putClasse', async (datas, { rejectWithValue }) => {
+  try {
+    const response = await put('classe', datas);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.reponse.data);
+  }
+});
 export const postClasse = createAsyncThunk('classe/postClasse', async (datas, { rejectWithValue }) => {
   try {
     const response = await post('classe', datas);
@@ -148,6 +156,42 @@ const option = createSlice({
       };
     },
     [putOption.rejected]: (state, action) => {
+      return {
+        ...state,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'rejected',
+        updateOptionError: action.payload
+      };
+    },
+    // eslint-disable-next-line no-unused-vars
+    [putClasse.pending]: (state, action) => {
+      return {
+        ...state,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'pending',
+        updateOptionError: ''
+      };
+    },
+    [putClasse.fulfilled]: (state, action) => {
+      let opt = state.option.map((x) => (x._id === action.payload._id ? action.payload : x));
+      return {
+        ...state,
+        option: opt,
+        addOption: '',
+        addOptionError: '',
+        getOption: '',
+        getOptionError: '',
+        updateOption: 'success',
+        updateOptionError: ''
+      };
+    },
+    [putClasse.rejected]: (state, action) => {
       return {
         ...state,
         addOption: '',

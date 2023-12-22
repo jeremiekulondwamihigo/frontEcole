@@ -5,7 +5,6 @@ import { memo, useContext } from 'react';
 import TabComponent from 'Control/Tab';
 import TableEleve from 'pages/Eleve/TableEleve';
 import Titeur from './Titeur';
-import AffecterCour from './AffecterCour';
 import FicheCotation from './FicheCotation';
 
 function Affichage() {
@@ -13,14 +12,12 @@ function Affichage() {
   let titre = [
     { id: 0, label: 'Eleves' },
     { id: 1, label: 'Titulaire' },
-    { id: 2, label: 'Affectation Cours' },
-    { id: 3, label: 'Fiche de cotation' },
+    { id: 2, label: 'Fiche de cotation' },
   ];
   let components = [
     { id: 0, component: <TableEleve classe={showDataClasseSelect} /> },
     { id: 1, component: <Titeur /> },
-    { id: 2, component: <AffecterCour /> },
-    { id: 3, component: <FicheCotation /> },
+    { id: 2, component: <FicheCotation /> },
   ];
   return (
     <Grid container spacing={1}>

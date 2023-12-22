@@ -28,4 +28,34 @@
   table tbody tr:last-child td {
     border: none;
   }
+  .imageEnseignant > div > img{
+    border-radius: 50%;
+  }
+  .imageEnseignant{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .enseignantDiv >p{
+    padding: 0;
+    margin: 0;
+  }
+  .enseignantDiv{
+    margin-bottom: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding:0px 4px;
+    cursor: pointer;
+  }
+  .enseignantDiv .ensegnantStatus{
+    font-size: 12px;
+    color: rgb(126, 126, 101);
+  }
+  .enseignantDiv .enseignantNom{
+    font-weight: 700;
+  }
+  .enseignantDiv:hover{
+    background-color: #dedede;
+    transition: 0.5s all ease-in;
+  }
   

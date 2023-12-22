@@ -25,19 +25,16 @@ import { Formik } from 'formik';
 
 // project import
 import FirebaseSocial from './FirebaseSocial';
-import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { lien_create } from 'utils/Liens';
 import DirectionSnackbar from 'Control/Message';
-import { useNavigate } from 'react-router-dom';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
   const [checked, setChecked] = React.useState(false);
-  const navigation = useNavigate();
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -74,15 +71,9 @@ const AuthLogin = () => {
                 setErrors({ submit: reponse.data });
                 setSubmitting(false);
               }
-              if (
-                reponse.status === 200 &&
-                reponse.data.info.fonction === 'etablissement' &&
-                reponse.data.token &&
-                reponse.data.info.user
-              ) {
+              if (reponse.status == 200 && reponse.data.info.fonction === 'etablissement' && reponse.data.token) {
                 localStorage.setItem('token', reponse.data.token);
-                navigation('/dashboard/default');
-                
+                window.location.replace('/ecole/dashboard/default');
               }
             })
             .catch(function () {
@@ -176,11 +167,9 @@ const AuthLogin = () => {
                 </Grid>
               )}
               <Grid item xs={12}>
-                <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
-                    Login
-                  </Button>
-                </AnimateButton>
+                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                  Login
+                </Button>
               </Grid>
               <Grid item xs={12}>
                 <Divider>
