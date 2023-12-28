@@ -296,11 +296,18 @@ module.exports = {
   },
   UpdateEleve: (req, res) => {
     try {
-      const { id, data } = req.body
+      const { id, date_naissance, lieu_naissance,
+         nationalite, nomPere, professionPere, nomMere,
+         professionMere 
+        } = req.body
       asyncLab.waterfall(
         [
           function (done) {
-            Model_Eleve.findByIdAndUpdate(id, data, { new: true }).then(
+            Model_Eleve.findByIdAndUpdate(id, {
+              date_naissance, lieu_naissance,
+         nationalite, nomPere, professionPere, nomMere,
+         professionMere 
+            }, { new: true }).then(
               (result) => {
                 if (result) {
                   done(null, result)
