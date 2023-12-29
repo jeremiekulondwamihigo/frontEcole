@@ -6,8 +6,7 @@ const asyncLab = require('async')
 
 ;(exports.AddClasse = (req, res) => {
   try {
-    console.log(req.body)
-    const { niveau, codeOption, indexe, titulaire } = req.body
+    const { niveau, codeOption, indexe } = req.body
     if (!niveau || !codeOption) {
       return res.status(404).json('Veuillez renseigner les champs')
     }
@@ -50,7 +49,7 @@ const asyncLab = require('async')
             .create({
               niveau,
               codeOption: option.codeOption,
-              titulaire,
+              
               indexe,
               codeClasse: `${option.codeOption}.${generateString(4)}`,
             })

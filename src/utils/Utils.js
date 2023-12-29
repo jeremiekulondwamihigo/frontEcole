@@ -36,7 +36,7 @@ export const retourneOption = (index) => {
 //Retourne la liste des classes
 export const loadingClasse = (option) => {
   let table = [];
-  let classAll = option.filter((x) => x.classe.length > 0);
+  let classAll = option.filter((x) => x.classe?.length > 0);
   for (let i = 0; i < classAll.length; i++) {
     for (let y = 0; y < classAll[i].classe.length; y++) {
       table.push(classAll[i].classe[y]);

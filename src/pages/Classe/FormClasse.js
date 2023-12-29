@@ -18,13 +18,11 @@ const FormClasse = ({ codeOption }) => {
       <Formik
         initialValues={{
           niveau: '',
-          indexe: '',
-          titulaire: ''
+          indexe: ''
         }}
         validationSchema={Yup.object().shape({
           niveau: Yup.string().max(1).required('Level is required'),
-          indexe: Yup.string().max(1).required("L'indexe est obligatoire"),
-          titulaire: Yup.string().max(255).required('Selectionnez le titulaire de la classe')
+          indexe: Yup.string().max(1).required("L'indexe est obligatoire")
         })}
         onSubmit={async (values, { setErrors, setStatus, reset, setSubmitting }) => {
           try {
@@ -86,26 +84,7 @@ const FormClasse = ({ codeOption }) => {
                   )}
                 </Stack>
               </Grid>
-              <Grid item xs={12}>
-                <Stack>
-                  <OutlinedInput
-                    id="titulaire"
-                    type="text"
-                    value={values.titulaire}
-                    name="titulaire"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    placeholder="Titulaire"
-                    fullWidth
-                    error={Boolean(touched.titulaire && errors.titulaire)}
-                  />
-                  {touched.titulaire && errors.titulaire && (
-                    <FormHelperText error id="standard-weight-helper-text-email-login">
-                      {errors.titulaire}
-                    </FormHelperText>
-                  )}
-                </Stack>
-              </Grid>
+
               <Grid item xs={12}>
                 <AnimateButton>
                   <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">

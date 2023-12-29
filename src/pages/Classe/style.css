@@ -28,13 +28,15 @@
   table tbody tr:last-child td {
     border: none;
   }
-  .imageEnseignant > div > img{
+  .titulaire > img{
     border-radius: 50%;
   }
-  .imageEnseignant{
-    display: flex;
+  .titulaireImage{
+    display: flex!important;
+    width: 100%;
     align-items: center;
     justify-content: center;
+    justify-items: center;
   }
   .enseignantDiv >p{
     padding: 0;

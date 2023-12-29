@@ -11,10 +11,13 @@ import { CreateContexte } from 'Context';
 import person from 'utils/person.png';
 import { useNavigate } from 'react-router-dom';
 import { putClasse } from 'Redux/Option';
-import { retourneOption, loadingClasse } from 'utils/Utils';
+import { loadingClasse } from 'utils/Utils';
+import AutoComplement from 'Control/Autocomplete';
+import Popup from 'Control/Modal';
 
 function Titeur() {
   const [value, setValue] = React.useState('');
+  const [valueChange, setValueChange] = React.useState('');
   const { showDataClasseSelect } = useContext(CreateContexte);
   const enseignant = useSelector((state) => state.parents.parent.filter((x) => x.status === 'enseignant'));
   const option = useSelector((state) => state.option.option);
@@ -25,71 +28,56 @@ function Titeur() {
   const dispatch = useDispatch();
   const sendData = (e) => {
     e.preventDefault();
-    let datas = { idClasse: showDataClasseSelect, codeEnseignant: value.code };
+    let datas = { idClasse: showDataClasseSelect, codeEnseignant: valueChange.code };
     dispatch(putClasse(datas));
   };
-  const loadingClasseTuteur = (id) => {
+  const loadingClasseTuteur = () => {
     let table = loadingClasse(option);
-    let classAll = option.filter((x) => x.classe.length > 0);
-    if (_.filter(table, { titulaire: id }).length > 0) {
-      return (
-        'classe : ' +
-        _.filter(table, { titulaire: id })[0].niveau +
-        'e ' +
-        retourneOption(_.filter(classAll, { codeOption: _.filter(table, { titulaire: id })[0].codeOption })[0].option)
-      );
-    } else {
-      return '';
+    let classeSelect = _.filter(table, { codeClasse: showDataClasseSelect });
+    if (classeSelect.length > 0) {
+      setValue(_.filter(enseignant, { code: classeSelect[0].titulaire })[0]);
     }
   };
+  React.useEffect(() => {
+    loadingClasseTuteur();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDataClasseSelect, option]);
+  const [open, setOpen] = React.useState(false);
   return (
     <Grid container>
-      <Grid item lg={4}>
-        {showDataClasseSelect ? (
-          <>
-            {enseignant.length > 0 &&
-              enseignant.map((index) => {
-                return (
-                  <div key={index._id} onClick={() => setValue(index)} className="enseignantDiv">
-                    <p className="enseignantNom">{index.nom}</p>
-                    <p className="ensegnantStatus">
-                      {loadingClasseTuteur(index.code)} Nbre de cours : {index.cours.length}
-                    </p>
-                  </div>
-                );
-              })}
-          </>
-        ) : (
-          <p>Veuillez selectionner la classe</p>
-        )}
-      </Grid>
-      {value && (
-        <>
-          <Grid item lg={8}>
-            <div className="imageEnseignant">
-              <div>
-                <img onClick={() => openImages(value._id)} src={value.filename ? value.filename : person} alt="enseignant" />
-                <div style={{ width: '90%' }}>
-                  <Typography noWrap sx={{ textAlign: 'center' }}>
-                    {value.nom}
-                  </Typography>
-                  <Typography noWrap sx={{ textAlign: 'center' }}>
-                    code : {value.code}
-                  </Typography>
-                  <Typography noWrap sx={{ textAlign: 'center' }}>
-                    contact : {value.telephone}
-                  </Typography>
-                </div>
-                <div>
-                  <Button color="primary" variant="contained" fullWidth onClick={(e) => sendData(e)}>
-                    Confirmer
-                  </Button>
-                </div>
-              </div>
-            </div>
+      <Popup open={open} setOpen={setOpen} title="Modifier le titeur">
+        <div style={{ width: '20rem' }}>
+          <AutoComplement value={valueChange} setValue={setValueChange} options={enseignant} title="Selectionnez un enseignant" />
+          <Button sx={{ marginTop: '10px' }} color="primary" variant="contained" fullWidth onClick={(e) => sendData(e)}>
+            Enregistrer
+          </Button>
+        </div>
+      </Popup>
+      <Grid item lg={12} className="titulaireImage">
+        <Grid className="titulaire">
+          {value && <img onClick={() => openImages(value._id)} src={value.filename ? value.filename : person} alt="enseignant" />}
+
+          <Grid>
+            {value && (
+              <>
+                <Typography sx={{ textAlign: 'center' }} noWrap>
+                  {value.nom}
+                </Typography>
+                <Typography sx={{ textAlign: 'center' }} noWrap>
+                  code : {value.code}
+                </Typography>
+                <Typography sx={{ textAlign: 'center' }} noWrap>
+                  contact : {value.telephone}
+                </Typography>
+              </>
+            )}
+
+            <Button color="warning" variant="contained" fullWidth onClick={() => setOpen(true)}>
+              Modifiez le titulaire
+            </Button>
           </Grid>
-        </>
-      )}
+        </Grid>
+      </Grid>
     </Grid>
   );
 }

@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import { Fab, Tooltip, Avatar } from '@mui/material';
-import { FileDoneOutlined, UserOutlined } from '@ant-design/icons';
+import { FileDoneOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { dateFrancais } from 'utils/Utils';
 
@@ -41,7 +41,7 @@ function TableEleve({ classe }) {
           <Avatar
             alt={params.row.eleve.nom.substr(0, 1)}
             onClick={() => openImages(params.row.eleve._id)}
-            src={params.row.eleve.filename ? params.row.eleve.filename : <UserOutlined />}
+            src={params.row.eleve.filename && params.row.eleve.filename}
           />
         );
       }
@@ -133,7 +133,7 @@ function TableEleve({ classe }) {
           <Avatar
             alt={params.row.eleve.nom.substr(0, 1)}
             onClick={() => openImages(params.row.eleve._id)}
-            src={params.row.eleve.filename ? params.row.eleve.filename : <UserOutlined />}
+            src={params.row.eleve.filename && params.row.eleve.filename}
           />
         );
       }

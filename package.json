@@ -2,7 +2,7 @@
   "name": "fronts",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://localhost:3000/ecole",
+  "homepage":"http://ecole.bboxxsupport.org/",
   "dependencies": {
     "@ant-design/colors": "^6.0.0",
     "@ant-design/icons": "^4.7.0",

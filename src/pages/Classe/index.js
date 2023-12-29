@@ -1,9 +1,10 @@
 import FormClasse from './FormClasse';
+
 import { Grid, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
-import './style.css';
+
 import { Dropdown, Menu } from 'antd';
 import { MessageOutlined } from '@ant-design/icons/lib/icons';
 import { memo, useContext, useEffect, useState } from 'react';
@@ -13,7 +14,7 @@ import Cours from 'pages/Cours';
 import Affichage from './Affichage';
 import { CreateContexte } from 'Context';
 import MainCard from 'components/MainCard';
-
+import './style.css';
 function Index() {
   const { id } = useParams();
   const { setShowDataClasseSelect } = useContext(CreateContexte);
@@ -31,11 +32,11 @@ function Index() {
   const [classe, setClasse] = useState();
   const fetchClasse = () => {
     let data = [];
-    if (option.length > 0 && option[0].classe.length > 0) {
-      for (let i = 0; i < option[0].classe.length; i++) {
+    if (option.length > 0 && option[0].classe?.length > 0) {
+      for (let i = 0; i < option[0].classe?.length; i++) {
         data.push({
-          label: EnLettre(parseInt(option[0].classe[i].niveau)),
-          key: option[0].classe[i].codeClasse,
+          label: EnLettre(parseInt(option[0].classe[i]?.niveau)),
+          key: option[0].classe[i]?.codeClasse,
           icon: <MessageOutlined />
         });
       }
@@ -51,13 +52,14 @@ function Index() {
     fetchClasse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, option]);
+  const menu = <Menu onClick={(e) => clockOption(e.key)} items={classe}></Menu>;
 
   return (
     <MainCard>
       <Grid container>
         {option && classe && (
-          <Grid item lg={2}>
-            <Dropdown overlay={<Menu onClick={(e) => clockOption(e.key)} items={classe}></Menu>} trigger={['contextMenu']}>
+          <Grid item>
+            <Dropdown overlay={menu} trigger={['contextMenu']}>
               <div className={option[0].active ? 'greenBackground' : 'redBackground'}>
                 <Typography sx={{ fontSize: '12px' }} noWrap>
                   {option[0].option} {classeSelect && 'Niveau ' + classeSelect[0].niveau + 'e' + classeSelect[0].indexe}
