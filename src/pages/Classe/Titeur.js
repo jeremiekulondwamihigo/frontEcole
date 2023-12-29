@@ -71,7 +71,6 @@ function Titeur() {
                 </Typography>
               </>
             )}
-
             <Button color="warning" variant="contained" fullWidth onClick={() => setOpen(true)}>
               Modifiez le titulaire
             </Button>

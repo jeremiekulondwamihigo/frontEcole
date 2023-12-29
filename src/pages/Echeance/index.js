@@ -14,7 +14,7 @@ import Echeance from './Echeance';
 function Index() {
   const [open, setOpen] = React.useState(false);
   const option = useSelector((state) => state.option.option);
-  const classes = option.filter((x) => x.classe.length > 0);
+  const classes = option?.filter((x) => x.classe.length > 0);
   const [title, setTitleSelect] = React.useState();
   return (
     <MainCard>

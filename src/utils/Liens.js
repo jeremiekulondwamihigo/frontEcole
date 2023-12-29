@@ -25,7 +25,6 @@ export const get = async (lien) => {
 };
 export const post = async (lien, data) => {
   const response = await axios.post(`${lien_create}/${lien}`, data, config);
-  console.log(response.data)
   return response;
 };
 export const deletes = async (lien) => {

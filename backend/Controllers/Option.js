@@ -67,7 +67,6 @@ exports.addOption = (req, res, next) => {
   let match = codeOption
     ? { $match: { codeOption: codeOption } }
     : { $match: {} }
-    console.log(codeOption)
   try {
     modelOption
       .aggregate([

@@ -21,7 +21,7 @@ const icons = {
 // ==============================|| MENU ITEMS - UTILITIES ||============================== //
 
 const utilities = {
-  id: 'utilities',
+  id: 'finance',
   title: 'Finance',
   type: 'group',
   children: [
@@ -29,16 +29,17 @@ const utilities = {
       id: 'echeance',
       title: 'Echéance',
       type: 'item',
-      url: '/echeance',
+      url: '/finance/echeance',
       icon: icons.FontSizeOutlined,
       breadcrumbs: false
     },
     {
-      id: 'payement',
+      id: 'finance',
       title: 'Payement',
       type: 'item',
-      url: '/color',
-      icon: icons.BgColorsOutlined
+      url: '/finance/payement',
+      icon: icons.BgColorsOutlined,
+      breadcrumbs: false
     },
     {
       id: 'rapport',

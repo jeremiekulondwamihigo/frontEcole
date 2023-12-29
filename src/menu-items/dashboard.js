@@ -27,7 +27,7 @@ const dashboard = {
       id: 'eleve',
       title: 'Eleves',
       type: 'item',
-      url: '/eleve',
+      url: '/dashboard/eleve',
       icon: icons.UsergroupAddOutlined,
       breadcrumbs: false
     },
