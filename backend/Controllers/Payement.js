@@ -4,13 +4,16 @@ const modelTitre = require('../Models/TitreFrais')
 const asyncLab = require('async')
 const _ = require('lodash')
 const modelAnnee = require('../Models/Model_Annee')
+const { generateString } = require('../Fonctions/Static_Function')
+const { ObjectId } = require('mongodb')
 
 module.exports = {
-  Payement: (req, res) => {
+  Payement: (req, res, next) => {
     try {
       const { montant, codeTitle, codeEleve, codeAnnee, codeAgent } = req.body
+      console.log(req.body)
       if (!montant || !codeTitle || !codeEleve || !codeAnnee || !codeAgent) {
-        return res.status(404).json('Veuillez renseigner les champs')
+        return res.status(201).json('Veuillez renseigner les champs')
       }
       asyncLab.waterfall(
         [
@@ -33,11 +36,11 @@ module.exports = {
                 if (eleve) {
                   done(null, eleve)
                 } else {
-                  return res.status(404).json('Eleve introuvable')
+                  return res.status(201).json('Eleve introuvable')
                 }
               })
               .catch(function (err) {
-                return res.status(404).json('Erreur')
+                return res.status(201).json('Erreur')
               })
           },
           function (eleve, done) {
@@ -62,11 +65,12 @@ module.exports = {
                 if (result) {
                   done(null, eleve, result)
                 } else {
-                  return res.status(200).json('Frais introuvable')
+                  return res.status(201).json('Frais introuvable')
                 }
               })
               .catch(function (err) {
-                return res.status(404).json('Erreur')
+                console.log(err)
+                return res.status(201).json('Erreur')
               })
           },
           //Recherche montant que l'élève a deja payé pour ce frais
@@ -78,13 +82,13 @@ module.exports = {
               })
               .then((resultat) => {
                 if (frais[0].montant === _.sumBy(resultat, 'montant')) {
-                  return res.status(404).json('Frais achevé')
+                  return res.status(201).json('Frais achevé')
                 } else {
                   done(null, eleve, frais, resultat)
                 }
               })
               .catch(function (err) {
-                return res.status(404).json('Erreur')
+                return res.status(201).json('Erreur')
               })
           },
           function (eleve, frais, prevPayement, done) {
@@ -95,6 +99,8 @@ module.exports = {
                 codeTitle: frais[0].codeTitle,
                 codeEleve: eleve[0].codeEleve,
                 codeAgent,
+                codeAnnee,
+                id: generateString(7),
                 dateSave: new Date(),
                 reste:
                   frais[0].frais.montant -
@@ -105,18 +111,22 @@ module.exports = {
               })
               .catch(function (err) {
                 if (err.errors['reste']) {
-                  return res.status(404).json('Le reste doit etre 0 pas moins')
+                  return res.status(201).json('Le reste doit etre 0 pas moins')
                 } else {
-                  return res.status(404).json('Erreur')
+                  return res.status(201).json('Erreur')
                 }
               })
           },
         ],
         function (result) {
           if (result) {
-            return res.status(200).json(result)
+            req.recherche = {
+              codeEleve: result.codeEleve,
+              codeAnnee: result.codeAnnee,
+            }
+            next()
           } else {
-            return res.status(404).json("Erreur d'enregistrement")
+            return res.status(201).json("Erreur d'enregistrement")
           }
         },
       )
@@ -152,33 +162,46 @@ module.exports = {
                 },
               },
               {
-                $unwind : "$payment"
+                $unwind: '$payment',
               },
               {
-                $lookup : {
-                  from :"eleves",
-                  localField : "payment.codeEleve",
-                  foreignField:"codeEleve",
-                  as:"eleve"
-                }
+                $lookup: {
+                  from: 'eleves',
+                  localField: 'payment.codeEleve',
+                  foreignField: 'codeEleve',
+                  as: 'eleve',
+                },
               },
               {
-                $unwind : "$eleve"
+                $unwind: '$eleve',
               },
               {
                 $addFields: {
-                 nom : {$concat : ["$eleve.nom", " ","$eleve.postnom"," ", "$eleve.prenom"]},
-                 somme : "$payment.montant",
-                 reste : "$payment.reste",
-                 createdAt : "$payment.createdAt",
-                 dateSave : "$payment.dateSave"
-                }
+                  nom: {
+                    $concat: [
+                      '$eleve.nom',
+                      ' ',
+                      '$eleve.postnom',
+                      ' ',
+                      '$eleve.prenom',
+                    ],
+                  },
+                  somme: '$payment.montant',
+                  reste: '$payment.reste',
+                  createdAt: '$payment.createdAt',
+                  dateSave: '$payment.dateSave',
+                },
               },
               {
-                $project : {
-                  eleve : 0, payment:0, codeAnnee:0, debut:0,fin:0,codeTitle:0
-                }
-              }
+                $project: {
+                  eleve: 0,
+                  payment: 0,
+                  codeAnnee: 0,
+                  debut: 0,
+                  fin: 0,
+                  codeTitle: 0,
+                },
+              },
             ])
             .then((title) => {
               return res.status(200).json(title)
@@ -189,11 +212,58 @@ module.exports = {
       console.log(error)
     }
   },
-  readOnePayment : (req, res)=>{
+  readOnePayment: (req, res) => {
     try {
-      
+      const resultat = req.recherche
+      const { codeEleve, codeAnnee } = req.params
+      let match = resultat
+        ? {
+            $match: {
+              codeEleve: resultat.codeEleve,
+              codeAnnee: resultat.codeAnnee,
+            },
+          }
+        : { $match: { codeEleve, codeAnnee } }
+
+      if (!codeEleve || !codeAnnee) {
+      }
+      modelPayement
+        .aggregate([
+          match,
+          {
+            $lookup: {
+              from: 'titrefrais',
+              localField: 'codeTitle',
+              foreignField: 'codeTitle',
+              as: 'title',
+            },
+          },
+          {
+            $unwind: '$title',
+          },
+          {
+            $addFields: {
+              titre: '$title.title',
+            },
+          },
+          {
+            $project: { title: 0, codeTitle: 0 },
+          },
+        ])
+        .then((result) => {
+          if (result) {
+            return res.status(200).json(result.reverse())
+          } else {
+            return res.status(200).json([])
+          }
+        })
+        .catch(function (err) {
+          if (err) {
+            return res.status(200).json([])
+          }
+        })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  }
+  },
 }

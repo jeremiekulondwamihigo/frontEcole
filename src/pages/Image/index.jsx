@@ -14,13 +14,14 @@ const UploadImage = () => {
   const dispatch = useDispatch();
   const eleve = useSelector((state) => state.eleveinfo.eleve);
   const parent = useSelector((state) => state.parents.parent);
+  
   const [parentElve, setParentEleve] = useState({ nom: '', titre: '' });
   const loading = () => {
     let elev = _.filter(eleve, { _id: id });
     let pare = _.filter(parent, { _id: id });
     var nom = '';
     if (elev.length > 0) {
-      setParentEleve({ nom: eleve[0].fullname, titre: 'eleve' });
+      setParentEleve({ nom: elev[0].fullname, titre: 'eleve' });
     }
     if (pare.length > 0) {
       setParentEleve({ nom: pare[0].nom, titre: 'enseignant' });

@@ -16,7 +16,7 @@ const {
   AddFrais,
   readTitle,
 } = require('../Controllers/TitreFrais')
-const {Payement} = require('../Controllers/Payement')
+const {Payement, readOnePayment} = require('../Controllers/Payement')
 
 //PARAMETRES
 router.post('/annee', protect, Add_Annee)
@@ -30,7 +30,7 @@ router.post('/periode', protect, AddPeriode)
 //Finance
 router.post('/titreFrais', protect, AddTitreFrais, readTitle)
 router.post('/frais', protect, AddFrais, readTitle)
-router.post("/payement", Payement)
+router.post("/payement", Payement, readOnePayment)
 
 //FIN TUTEUR
 router.post('/login', login)

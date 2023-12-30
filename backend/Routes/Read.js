@@ -12,7 +12,7 @@ const {
 } = require('../Controllers/Parent')
 const { ReadPeriode } = require('../Controllers/Periode')
 const { readTitle } = require('../Controllers/TitreFrais')
-const { ReadPayement } = require('../Controllers/Payement')
+const { ReadPayement, readOnePayment } = require('../Controllers/Payement')
 
 //FIN NOUVELLE VERSION
 
@@ -29,6 +29,7 @@ router.get('/parent', protect, ListeParentEnseignant)
 //Finance
 router.get("/titleFrais", protect, readTitle)
 router.get("/payement", ReadPayement)
+router.get("/onePayement/:codeEleve/:codeAnnee",readOnePayment)
 
 //FIN ETABLISSEMENT
 

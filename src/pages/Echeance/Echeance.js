@@ -3,10 +3,15 @@ import { useSelector } from 'react-redux';
 import { dateFrancais, loadingClasse, retourneOption } from 'utils/Utils';
 import _ from 'lodash';
 function Echeance() {
-  const echeance = useSelector((state) => state.title.title);
+  const annee = useSelector((state) => _.filter(state.annee.annee, { active: true }));
+  const echeances = useSelector((state) => state.title.title);
+  const [echeance, setEcheance] = React.useState();
+  React.useEffect(() => {
+    setEcheance(_.filter(echeances, { codeAnnee: annee[0]?.codeAnnee }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [echeances]);
   const option = useSelector((state) => state.option.option);
   const classe = loadingClasse(option);
-  console.log(classe, echeance);
   const returnOption = (codeOption) => {
     return retourneOption(_.filter(option, { codeOption })[0].option);
   };
