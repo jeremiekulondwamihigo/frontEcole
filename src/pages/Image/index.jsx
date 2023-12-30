@@ -14,7 +14,7 @@ const UploadImage = () => {
   const dispatch = useDispatch();
   const eleve = useSelector((state) => state.eleveinfo.eleve);
   const parent = useSelector((state) => state.parents.parent);
-  
+
   const [parentElve, setParentEleve] = useState({ nom: '', titre: '' });
   const loading = () => {
     let elev = _.filter(eleve, { _id: id });

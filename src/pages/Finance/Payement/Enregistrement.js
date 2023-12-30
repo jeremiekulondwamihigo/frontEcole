@@ -116,7 +116,6 @@ const Enregistrement = ({ eleve, anneeSelect, codeAgent }) => {
                       <td>{index.reste}$</td>
                       <td>
                         <Recu data={index} eleve={eleve} />
-                        
                       </td>
                     </tr>
                   );
