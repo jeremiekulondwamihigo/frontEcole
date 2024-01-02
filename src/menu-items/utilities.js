@@ -45,8 +45,9 @@ const utilities = {
       id: 'rapport',
       title: 'Rapport',
       type: 'item',
-      url: '/shadow',
-      icon: icons.BarcodeOutlined
+      url: '/finance/rapport',
+      icon: icons.BarcodeOutlined,
+      breadcrumbs: false
     },
     {
       id: 'depenses',

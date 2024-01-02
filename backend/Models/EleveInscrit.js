@@ -1,5 +1,13 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
+const derogatn = new mongoose.Schema(
+  {
+    date: { type: Date, required: true },
+    codeAgent: { type: String, required: true },
+    active: { type: Boolean, required: true, default: true },
+  },
+  { timestamps: true },
+)
 const schema = new mongoose.Schema({
   id: {
     type: String,
@@ -9,7 +17,7 @@ const schema = new mongoose.Schema({
   codeEleve: {
     type: String,
     required: true,
-    ref: "eleves",
+    ref: 'eleves',
   },
   codeAnnee: {
     type: String,
@@ -19,7 +27,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
     //C'est recommander si le niveau de l'élève est inferieur à 5
-    ref: "classes",
+    ref: 'classes',
   },
   resultat: {
     type: Number,
@@ -31,9 +39,11 @@ const schema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-});
+  derogation: {
+    type: derogatn,
+    required: false,
+  },
+})
 
-
-
-const model = mongoose.model("EleveInscrit", schema);
-module.exports = model;
+const model = mongoose.model('EleveInscrit', schema)
+module.exports = model

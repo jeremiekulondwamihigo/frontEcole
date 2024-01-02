@@ -22,11 +22,7 @@ const text = [
   { id: 4, placeholder: 'Entrez le lieu de naissance', value: 'lieu_naissance' },
   { id: 5, placeholder: 'Entrez la date de naissance', value: 'date_naissance', type: 'date' },
   { id: 6, placeholder: 'Entrez le genre; M ou F', value: 'genre' },
-  { id: 7, placeholder: 'Entrez le Contact du tuteur', value: 'contactTuteur' },
-  { id: 8, placeholder: 'Entrez le nom du pere', value: 'nomPere' },
-  { id: 9, placeholder: 'Profession du père', value: 'professionPere' },
-  { id: 10, placeholder: 'Entrez le nom de la mare', value: 'nomPere' },
-  { id: 11, placeholder: 'Profession de la mère', value: 'professionMere' }
+  { id: 7, placeholder: 'Entrez le Contact du tuteur', value: 'contactTuteur' }
 ];
 const NouvelleInscription = () => {
   const [open, setOpen] = useState(true);

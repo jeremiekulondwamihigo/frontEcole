@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Grid, TextField, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -18,6 +19,7 @@ const Enregistrement = ({ eleve, anneeSelect, codeAgent }) => {
   const [titleSelect, setTitleSelect] = React.useState('');
   const [payementEleve, setPayement] = React.useState([]);
   const [montant, setMontant] = React.useState('');
+  const [sending, setSending] = React.useState(false);
 
   const loadingEcheance = () => {
     let annee = _.filter(annees, { active: true });
@@ -52,23 +54,48 @@ const Enregistrement = ({ eleve, anneeSelect, codeAgent }) => {
 
   const sendPayement = async (e) => {
     e.preventDefault();
-    const data = {
-      montant,
-      codeTitle: titleSelect.codeTitle,
-      // eslint-disable-next-line react/prop-types
-      codeEleve: eleve.codeEleve,
-      // eslint-disable-next-line react/prop-types
-      codeAnnee: anneeSelect.codeAnnee,
-      codeAgent
-    };
-    // eslint-disable-next-line prettier/prettier
-    const response = await post('payement', data);
-    if (response.data.length > 0 && response.status === 200) {
-      setPayement(response.data);
+    setSending(true);
+    try {
+      const data = {
+        montant,
+        codeTitle: titleSelect.codeTitle,
+        // eslint-disable-next-line react/prop-types
+        codeEleve: eleve.codeEleve,
+        // eslint-disable-next-line react/prop-types
+        codeAnnee: anneeSelect.codeAnnee,
+        codeAgent
+      };
+      // eslint-disable-next-line prettier/prettier
+      const response = await post('payement', data);
+      if (response.data.length > 0 && response.status === 200) {
+        setPayement(response.data);
+      }
+      setSending(false);
+    } catch (error) {
+      if (error.code === 'ERR_NETWORK') {
+        alert('Rassurez-vous que votre appareil a une connexion active');
+      }
+      setSending(false);
     }
   };
   return (
     <Grid>
+      {titleSelect && payementEleve && (
+        <Grid sx={{ mb: '15px', textAlign: 'center', backgroundColor: '#dedede', padding: '5px', borderRadius: '20px' }}>
+          Total à payer <span className="totalAPayer">{_.filter(titleSelect.frais, { codeClasse: eleve.codeClasse })[0]?.montant}$</span>
+          Total deja payer{' '}
+          <span className="dejaPayer">
+            {payementEleve && _.sumBy(_.filter(payementEleve, { codeTitle: titleSelect.codeTitle }), 'montant')}$
+          </span>
+          Reste à payer{' '}
+          <span className="reste">
+            {_.filter(titleSelect.frais, { codeClasse: eleve.codeClasse })[0]?.montant -
+              _.sumBy(_.filter(payementEleve, { codeTitle: titleSelect.codeTitle }), 'montant')}
+            $
+          </span>
+        </Grid>
+      )}
+
       <Grid container>
         <Grid item lg={4}>
           <AutoComplementRecherche
@@ -83,7 +110,7 @@ const Enregistrement = ({ eleve, anneeSelect, codeAgent }) => {
           <TextField placeholder="Montant" type="number" fullWidth onChange={(e) => setMontant(e.target.value)} />
         </Grid>
         <Grid sx={{ padding: '5px' }} item lg={4}>
-          <Button color="primary" variant="contained" onClick={(e) => sendPayement(e)}>
+          <Button disabled={sending} color="primary" variant="contained" onClick={(e) => sendPayement(e)}>
             <Add fontSize="small" /> <span>Enregistrer</span>
           </Button>
         </Grid>

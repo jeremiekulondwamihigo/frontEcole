@@ -11,10 +11,10 @@ import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
 import SettingTab from './SettingTab';
 import { useSelector } from 'react-redux';
+import { Person } from '@mui/icons-material';
 
 // assets
 import { SettingOutlined, UserOutlined } from '@ant-design/icons';
-import { lien_image } from 'utils/Liens';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -86,7 +86,7 @@ const Profile = () => {
         onClick={handleToggle}
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
-          <Avatar alt="profile user" src={`${lien_image}/${user.user.filename}`} sx={{ width: 32, height: 32 }} />
+          <Avatar alt="K" src={<Person />} sx={{ width: 32, height: 32 }} />
           <Typography variant="subtitle1">Admin</Typography>
         </Stack>
       </ButtonBase>
@@ -128,7 +128,7 @@ const Profile = () => {
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
-                            <Avatar alt="profile user" src={`${lien_image}/${user.user.filename}`} sx={{ width: 32, height: 32 }} />
+                            <Avatar alt="C" src={<Person />} sx={{ width: 32, height: 32 }} />
                             <Stack>
                               <Typography variant="h6">Admin</Typography>
                               <Typography variant="body2" color="textSecondary">

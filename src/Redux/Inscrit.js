@@ -28,13 +28,14 @@ export const readInscrit = createAsyncThunk('inscrit/readInscrit', async (id, { 
 });
 export const putEleve = createAsyncThunk('inscrit/putEleve', async (datas, { rejectWithValue }) => {
   try {
-    let { id, data } = datas;
-    const response = await put('infoEleve', { id, data });
+    let { id, data, lien } = datas;
+    const response = await put(lien ? lien :'infoEleveWeb', { id, data });
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response.data);
   }
 });
+
 const inscrit = createSlice({
   name: 'inscrit',
   initialState,

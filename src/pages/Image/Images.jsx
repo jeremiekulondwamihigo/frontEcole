@@ -13,7 +13,7 @@ const Images = ({ src }) => {
   // or you can download flipped and rotated image
   // https://codesandbox.io/s/zi-ding-yi-gong-ju-lan-antd-5-7-0-forked-c9jvmp
   const onDownload = () => {
-    fetch()
+    fetch(src)
       .then((response) => response.blob())
       .then((blob) => {
         const url = URL.createObjectURL(new Blob([blob]));

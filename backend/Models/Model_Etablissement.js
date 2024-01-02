@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
   id: {
@@ -22,23 +22,30 @@ const schema = new mongoose.Schema({
     default: true,
     enum: [true, false],
   },
-
-  code_option: { type: Array, required: false, default: ["Education de Base"] },
+  ville: {
+    type: String,
+    required: false,
+  },
+  commune: {
+    type: String,
+    required: false,
+  },
+  bp: { type: String, required: false },
   periode: {
     type: String,
     required: true,
-    trim:true,
+    trim: true,
     enum: [
-      "premiere",
-      "deuxieme",
-      "examenOne",
-      "troisieme",
-      "quatrieme",
-      "examenTwo",
+      'premiere',
+      'deuxieme',
+      'examenOne',
+      'troisieme',
+      'quatrieme',
+      'examenTwo',
     ],
-    default:"premiere"
+    default: 'premiere',
   },
-});
+})
 
-const model = mongoose.model("Etablissement", schema);
-module.exports = model;
+const model = mongoose.model('Etablissement', schema)
+module.exports = model

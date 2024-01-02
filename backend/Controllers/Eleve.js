@@ -8,6 +8,7 @@ const asyncLab = require('async')
 const ModelOption = require('../Models/Option')
 const ModelClasse = require('../Models/Classe')
 const ModelEleveInscrit = require('../Models/EleveInscrit')
+const { ObjectId } = require('mongodb')
 
 const lookAnnee = {
   $lookup: {
@@ -56,10 +57,6 @@ module.exports = {
         nom,
         postnom,
         prenom,
-        nomPere,
-        professionPere,
-        nomMere,
-        professionMere,
         date_naissance,
         lieu_naissance,
         genre,
@@ -119,10 +116,6 @@ module.exports = {
               nom,
               postnom,
               prenom,
-              nomPere,
-              professionPere,
-              nomMere,
-              professionMere,
               genre,
               contactTuteur,
               date_naissance,
@@ -161,7 +154,7 @@ module.exports = {
       console.log(error)
     }
   },
-  Inscription: (req, res) => {
+  Inscription: (req, res, next) => {
     try {
       const { codeOption, codeClasse, codeEleve } = req.body
       asyncLab.waterfall(
@@ -237,25 +230,8 @@ module.exports = {
               })
           },
           function (result, done) {
-            ModelEleveInscrit.aggregate([
-              { $match: { _id: result._id } },
-              lookAnnee,
-              unwindAnnee,
-              loookInfoEleve,
-              unwindEleve,
-              loookClasse,
-              unwindClasse,
-              loookOption,
-              unwindOption,
-            ])
-              .then((resultat) => {
-                if (resultat) {
-                  done(resultat)
-                }
-              })
-              .catch(function (err) {
-                console.log(err)
-              })
+            req.recherche = result._id;
+            next()
           },
         ],
         function (result) {
@@ -271,8 +247,11 @@ module.exports = {
     }
   },
   ReadInscrit: (req, res) => {
+    let recherche = req.recherche
+    let match = recherche ? {$match : {_id : new ObjectId(recherche)}} : {$match : {}}
     try {
       ModelEleveInscrit.aggregate([
+        match,
         lookAnnee,
         unwindAnnee,
         loookInfoEleve,
@@ -294,25 +273,70 @@ module.exports = {
       console.log(error)
     }
   },
-  UpdateEleve: (req, res) => {
+  UpdateEleve: (req, res, next) => {
     try {
-      const { id, date_naissance, lieu_naissance,
-         nationalite, nomPere, professionPere, nomMere,
-         professionMere 
-        } = req.body
+      const {
+        id,
+        date_naissance,
+        lieu_naissance,
+        nationalite,
+        nomPere,
+        professionPere,
+        nomMere,
+        professionMere,
+      } = req.body
       asyncLab.waterfall(
         [
           function (done) {
-            Model_Eleve.findByIdAndUpdate(id, {
-              date_naissance, lieu_naissance,
-         nationalite, nomPere, professionPere, nomMere,
-         professionMere 
-            }, { new: true }).then(
+            Model_Eleve.findByIdAndUpdate(
+              id,
+              {
+                date_naissance,
+                lieu_naissance,
+                nationalite,
+                nomPere,
+                professionPere,
+                nomMere,
+                professionMere,
+              },
+              { new: true },
+            ).then((result) => {
+              if (result) {
+                done(null, result)
+              } else {
+                console.log(result)
+                return res.status(404).json('Erreur')
+              }
+            })
+          },
+          function (result, done) {
+            req.recherche = result._id;
+            next()
+          },
+        ],
+        function (result) {
+          if (result) {
+            return res.status(200).json(result[0])
+          } else {
+            return res.status(404).json("Erreur d'enregistrement")
+          }
+        },
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  UpdateEleveImage: (req, res) => {
+    try {
+      const { id, data } = req.body
+      asyncLab.waterfall(
+        [
+          function (done) {
+            Model_Eleve.findByIdAndUpdate(id, data, { new: true }).then(
               (result) => {
                 if (result) {
                   done(null, result)
                 } else {
-                  console.log(result);
                   return res.status(404).json('Erreur')
                 }
               },
@@ -348,6 +372,28 @@ module.exports = {
           }
         },
       )
+    } catch (error) {
+      console.log(error)
+    }
+  },
+  UpdateEleveInscrit: (req, res, next) => {
+    try {
+      const { id, data } = req.body
+      if (!id || !data) {
+        return res.status(404).json('Veuillez renseigner les champs')
+      }
+      asyncLab.waterfall([
+        function (done) {
+          ModelEleveInscrit.findByIdAndUpdate(id, data, { new: true }).then(
+            (eleve) => {
+              if (eleve) {
+                req.recherche = eleve._id
+                next()
+              }
+            },
+          )
+        },
+      ])
     } catch (error) {
       console.log(error)
     }

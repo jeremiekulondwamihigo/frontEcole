@@ -11,7 +11,6 @@ module.exports = {
   Payement: (req, res, next) => {
     try {
       const { montant, codeTitle, codeEleve, codeAnnee, codeAgent } = req.body
-      console.log(req.body)
       if (!montant || !codeTitle || !codeEleve || !codeAnnee || !codeAgent) {
         return res.status(201).json('Veuillez renseigner les champs')
       }
@@ -52,7 +51,7 @@ module.exports = {
                   $lookup: {
                     from: 'frais',
                     pipeline: [
-                      { $match: { codeClasse: eleve[0].classe.codeClasse } },
+                      { $match: { codeClasse: eleve[0].classe.codeClasse, codeTitle } },
                     ],
                     as: 'frais',
                   },
@@ -92,6 +91,7 @@ module.exports = {
               })
           },
           function (eleve, frais, prevPayement, done) {
+            console.log(frais)
             //Enregistrement payement
             modelPayement
               .create({
@@ -104,7 +104,7 @@ module.exports = {
                 dateSave: new Date(),
                 reste:
                   frais[0].frais.montant -
-                  (_.sumBy(prevPayement, 'montant') + parseInt(montant)),
+                  (_.sumBy(prevPayement, 'montant') + parseFloat(montant)),
               })
               .then((result) => {
                 done(result)
@@ -247,7 +247,7 @@ module.exports = {
             },
           },
           {
-            $project: { title: 0, codeTitle: 0 },
+            $project: { title: 0 },
           },
         ])
         .then((result) => {

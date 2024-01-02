@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, TextField } from '@mui/material';
+import { Grid, Typography, TextField, Button } from '@mui/material';
 import Enregistrement from './Enregistrement.js';
 import { useSelector } from 'react-redux';
 import _ from 'lodash';
@@ -7,6 +7,10 @@ import AutoComplementEleveInscrit from 'Control/AutoCompleteEleveInscrit.jsx';
 import MainCard from 'components/MainCard.js';
 import Images from 'pages/Image/Images.jsx';
 import Select from 'Control/Select.jsx';
+import Derogation from './Derogation.js';
+import Popup from 'Control/Modal.jsx';
+import { dateFrancais } from 'utils/Utils.js';
+import { Clear } from '@mui/icons-material';
 
 function Index() {
   const inscrit = useSelector((state) => state.inscrit.inscrit);
@@ -15,6 +19,7 @@ function Index() {
   const [value, setValue] = React.useState('');
   const [anneeSelect, setAnneeSelect] = React.useState('');
   const [codeAgent, setCodeAgent] = React.useState('');
+  const [open, setOpen] = React.useState(false);
 
   const loading = () => {
     let annees = _.filter(annee, { active: true });
@@ -47,7 +52,7 @@ function Index() {
             {data && <AutoComplementEleveInscrit value={value} setValue={setValue} options={data} title="Selectionnez l'élève" />}
           </Grid>
           {value && (
-            <Grid>
+            <Grid sx={{ textAlign: 'center' }}>
               <Images src={value.eleve.filename} />
               <Typography noWrap>{value.eleve.nom + ' ' + value.eleve.postnom + ' ' + value.eleve.prenom}</Typography>
               <Typography>
@@ -59,16 +64,42 @@ function Index() {
               <Typography noWrap>Réf : {value.ref}</Typography>
               <Typography noWrap>code Eleve : {value.codeEleve}</Typography>
               <Typography noWrap>Année scolaire : {value.annee.annee}</Typography>
+              {value.derogation && (
+                <Typography sx={value?.derogation?.active === false && style.red}>
+                  Dérogation jusqu&apos;au : {dateFrancais(value.derogation.date)}
+                  {value.derogation?.active && <Clear color="red" fontSize="small" />}
+                </Typography>
+              )}
               {value.resultat > 0 && <Typography>Réf : {value.resultat + '%'}</Typography>}
             </Grid>
           )}
+          <Grid container>
+            <Grid item lg={6}>
+              <Button variant="contained" color="primary" fullWidth>
+                Palmares
+              </Button>
+            </Grid>
+            <Grid item lg={6} sx={{ paddingLeft: '5px' }}>
+              <Button variant="contained" color="secondary" fullWidth onClick={() => setOpen(true)}>
+                Dérogation
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item lg={8}>
+        <Grid item lg={8} sx={{ paddingLeft: '10px' }}>
           {value && anneeSelect && <Enregistrement eleve={value} codeAgent={codeAgent} anneeSelect={anneeSelect} />}
         </Grid>
       </Grid>
+      <Popup open={open} setOpen={setOpen} title="Accordez une dérogation">
+        {value && codeAgent && <Derogation id={value._id} codeAgent={codeAgent} />}
+      </Popup>
     </MainCard>
   );
 }
 
+const style = {
+  red: {
+    color: 'red'
+  }
+};
 export default Index;
