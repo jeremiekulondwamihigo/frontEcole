@@ -15,13 +15,6 @@ const support = {
   type: 'group',
   children: [
     {
-      id: 'affectation',
-      title: 'Affectation cours',
-      type: 'item',
-      url: '/sample-page',
-      icon: icons.ChromeOutlined
-    },
-    {
       id: 'cotation',
       title: 'Cotation',
       type: 'item',

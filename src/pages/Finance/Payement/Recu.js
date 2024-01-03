@@ -22,6 +22,7 @@ import { dateFrancais } from 'utils/Utils';
 })(jsPDF.API);
 // eslint-disable-next-line react/prop-types
 function Recu({ data, eleve }) {
+  console.log(data);
   const user = useSelector((state) => state.user.user);
   const printRecu = (event) => {
     event.preventDefault();
@@ -48,13 +49,15 @@ function Recu({ data, eleve }) {
     doc.text(0.2, 0.8, 'Elève');
     // eslint-disable-next-line react/prop-types
     doc.text(taille, 0.8, ': ' + eleve.eleve.nom + ' ' + eleve.eleve.postnom + ' ' + eleve.eleve.prenom);
-    doc.text(0.2, 1.08, 'Total  Payé');
+    doc.text(0.2, 1.08, 'Pour');
+    doc.text(taille, 1.08, ': ' + data.titre);
+    doc.text(0.2, 1.22, 'Montant payé');
     // eslint-disable-next-line react/prop-types
-    doc.text(taille, 1.08, ': ' + data.montant + ' $ (' + NumberToLetter(data.montant) + ' dollars)');
-    doc.text(0.2, 1.22, 'reste à payer');
+    doc.text(taille, 1.22, ': ' + data.montant + ' $ (' + NumberToLetter(data.montant) + ' dollars)');
+    doc.text(0.2, 1.36, 'reste à payer');
     // eslint-disable-next-line react/prop-types
-    doc.text(taille, 1.22, ': ' + data.reste + ' $ (' + NumberToLetter(data.reste) + ' dollars)');
-    doc.text(taille, 1.78, 'Fait à Goma, le : ' + dateFrancais(data.createdAt));
+    doc.text(taille, 1.36, ': ' + data.reste + ' $ (' + NumberToLetter(data.reste) + ' dollars)');
+    doc.text(taille, 1.55, 'Fait à Goma, le : ' + dateFrancais(data.createdAt));
 
     doc.autoPrint();
     const blob = doc.output('bloburl');

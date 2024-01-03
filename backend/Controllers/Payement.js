@@ -91,7 +91,7 @@ module.exports = {
               })
           },
           function (eleve, frais, prevPayement, done) {
-            console.log(frais)
+       
             //Enregistrement payement
             modelPayement
               .create({

@@ -13,6 +13,8 @@ const {
 const { ReadPeriode } = require('../Controllers/Periode')
 const { readTitle } = require('../Controllers/TitreFrais')
 const { ReadPayement, readOnePayment } = require('../Controllers/Payement')
+const { readSetRecouvrement } = require('../Controllers/SetRecouvrement')
+const { readAllClasse } = require('../Controllers/Classe')
 
 //FIN NOUVELLE VERSION
 
@@ -25,11 +27,14 @@ router.get('/inscrit', protect, ReadInscrit)
 router.get('/parentListeDesEleve/:id', ListeDesEleve)
 router.get('/periode', protect, ReadPeriode)
 router.get('/parent', protect, ListeParentEnseignant)
+router.get("/readAllClasse", protect, readAllClasse)
 
 //Finance
 router.get("/titleFrais", protect, readTitle)
 router.get("/payement", ReadPayement)
 router.get("/onePayement/:codeEleve/:codeAnnee",readOnePayment)
+router.get("/setrecouvrements", readSetRecouvrement)
+
 
 //FIN ETABLISSEMENT
 

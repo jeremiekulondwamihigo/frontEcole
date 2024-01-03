@@ -49,7 +49,7 @@ const asyncLab = require('async')
             .create({
               niveau,
               codeOption: option.codeOption,
-              
+
               indexe,
               codeClasse: `${option.codeOption}.${generateString(4)}`,
             })
@@ -99,9 +99,7 @@ const asyncLab = require('async')
 }),
   (exports.readClasse = (req, res) => {
     try {
-      const { codeEtablissement } = req.params
       modelOption.aggregate([
-        { $match: { codeEtablissement } },
         {
           $lookup: {
             from: 'classe',
@@ -141,7 +139,6 @@ exports.updateClasse = (req, res, next) => {
             { new: true },
           )
           .then((classeupdate) => {
-            console.log(classes)
             if (classeupdate) {
               req.recherche = classes.codeOption
               next()
@@ -151,6 +148,36 @@ exports.updateClasse = (req, res, next) => {
           })
       },
     ])
+  } catch (error) {
+    console.log(error)
+  }
+}
+exports.readAllClasse = (req, res) => {
+  try {
+    modelClasse
+      .aggregate([
+        {
+          $lookup: {
+            from: 'options',
+            localField: 'codeOption',
+            foreignField: 'codeOption',
+            as: 'option',
+          },
+        },
+        {
+          $unwind: '$option',
+        },
+      ])
+      .then((response) => {
+        if (response) {
+          return res.status(200).json(response)
+        } else {
+          return res.status(200).json([])
+        }
+      })
+      .catch(function (err) {
+        console.log(err)
+      })
   } catch (error) {
     console.log(error)
   }

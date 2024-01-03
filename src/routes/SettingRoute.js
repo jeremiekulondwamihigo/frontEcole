@@ -12,6 +12,7 @@ const Images = Loadable(lazy(() => import('pages/Image')));
 const Enseignant = Loadable(lazy(() => import('pages/Enseignant')));
 const Parent = Loadable(lazy(() => import('pages/Parent')));
 const Profile = Loadable(lazy(() => import('pages/Profile')));
+const Recouvrement = Loadable(lazy(() => import('pages/Recouvrement')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -46,6 +47,10 @@ const MainRoutes = {
     {
       path: '/profile',
       element: <Profile />
+    },
+    {
+      path: '/recouvrement',
+      element: <Recouvrement />
     }
   ]
 };

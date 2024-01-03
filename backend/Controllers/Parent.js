@@ -292,7 +292,6 @@ exports.DeleteEleve = (req, res) => {
 exports.ListeParentEnseignant = (req, res) => {
   let code = req.recherche
   let match = code ? { $match: { code: code } } : { $match: {} }
-  console.log(match, code)
   try {
     modelParent
       .aggregate([

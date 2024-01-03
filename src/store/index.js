@@ -11,6 +11,8 @@ import { readEleve } from 'Redux/EleveInf';
 import { readInscrit } from 'Redux/Inscrit';
 import { readParent } from 'Redux/Parent';
 import { ReadTitle } from 'Redux/TitleFrais';
+import { readRecouvrements } from 'Redux/SetRecouvrement';
+import { readClasses } from 'Redux/ClasseAll';
 
 // ==============================|| REDUX TOOLKIT - MAIN STORE ||============================== //
 
@@ -27,5 +29,7 @@ dispatch(readEleve());
 dispatch(readInscrit());
 dispatch(readParent());
 dispatch(ReadTitle());
+dispatch(readRecouvrements());
+dispatch(readClasses());
 
 export { store, dispatch };

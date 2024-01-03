@@ -304,7 +304,6 @@ module.exports = {
               if (result) {
                 done(null, result)
               } else {
-                console.log(result)
                 return res.status(404).json('Erreur')
               }
             })
